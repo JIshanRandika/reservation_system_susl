@@ -16,21 +16,27 @@ class CreateHrbookingsTable extends Migration
         Schema::create('hrbookings', function (Blueprint $table) {
             $table->increments('BookingId');
             $table->string('BookingType');
-            $table->date('CheckInDate');
-			$table->date('CheckOutDate');
+//            $table->date('CheckInDate');
+//			$table->date('CheckOutDate');
+//
+//            $table->time('StartTime', $precision = 0);
+//            $table->time('EndTime', $precision = 0);
+            $table->dateTime('CheckInDateTime');
+            $table->dateTime('CheckOutDateTime');
+
 			$table->integer('NoOfAdults');
 			$table->integer('NoOfChildren');
             $table->integer('NoOfUnits');
             $table->string('Description');
             $table->string('Status');
             $table->unsignedBigInteger('Recommendation_From')->nullable()->unsigned();
-            $table->foreign('Recommendation_From')->references('id')->on('users'); 
+            $table->foreign('Recommendation_From')->references('id')->on('users');
             $table->boolean('VCApproval')->default(0);
             $table->string('GuestName');
             $table->unsignedBigInteger('GuestId');
-			$table->foreign('GuestId')->references('id')->on('users'); 
+			$table->foreign('GuestId')->references('id')->on('users');
             $table->integer('HolodayResortId')->unsigned();
-			$table->foreign('HolodayResortId')->references('HolodayResortId')->on('holidayresorts'); 
+			$table->foreign('HolodayResortId')->references('HolodayResortId')->on('holidayresorts');
 			$table->timestamps();
         });
     }

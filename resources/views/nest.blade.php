@@ -13,15 +13,15 @@
             @endif
         @endforeach
     </div>
-    
+
 </br>
    <p style="margin-left: 10px;">
-   NEST is the main circuit bungalow of the Faculty of Applied Sciences, coordinating from the Assistant Registrar of the Faculty of 
-   Applied Sciences. The guests to the NEST can be only the SUSL staff members or resource person to the university. It consist with 
-   one master bedroom with attached bathroom (Accommodate to 2 adults and one child) and 2 bedrooms with shared bathroom and one 
-   single room consist with two single beds. 
+   NEST is the main circuit bungalow of the Faculty of Applied Sciences, coordinating from the Assistant Registrar of the Faculty of
+   Applied Sciences. The guests to the NEST can be only the SUSL staff members or resource person to the university. It consist with
+   one master bedroom with attached bathroom (Accommodate to 2 adults and one child) and 2 bedrooms with shared bathroom and one
+   single room consist with two single beds.
    </p>
-   
+
 
    </div>
 </br>
@@ -40,22 +40,50 @@
                             {!! Form::select('NestId', $nestfill, null, ['class'=>'form-control', 'v-model' => 'room_type']) !!}
                         </div>
 
-                     <div class="form-group">
-                        {{Form::label('CheckInDate', 'Check In Date') }}
-                        {{ Form::date('CheckInDate', !empty($sessionData) ? Input::old('CheckInDate') : new \DateTime() , ['class' => 'form-control']) }}
+{{--                     <div class="form-group">--}}
+{{--                        {{Form::label('CheckInDate', 'Check In Date') }}--}}
+{{--                        {{ Form::date('CheckInDate', !empty($sessionData) ? Input::old('CheckInDate') : new \DateTime() , ['class' => 'form-control']) }}--}}
 
-                        </div>
-                        <div class="form-group">
-                        {{Form::label('CheckOutDate', 'Check Out Date') }}
-                        {{ Form::date('CheckOutDate', !empty($sessionData) ? Input::old('CheckOutDate') : new \DateTime(), ['class' => 'form-control']) }}
-                        </div>
+{{--                        </div>--}}
+{{--                        <div class="form-group">--}}
+{{--                        {{Form::label('CheckOutDate', 'Check Out Date') }}--}}
+{{--                        {{ Form::date('CheckOutDate', !empty($sessionData) ? Input::old('CheckOutDate') : new \DateTime(), ['class' => 'form-control']) }}--}}
+{{--                        </div>--}}
 
+
+{{--                ================--}}
+                <div class="form-group">
+                    {{Form::label('CheckInDateTime', 'Check in Date Time') }}
+                    {{ Form::datetimeLocal('CheckInDateTime', !empty($sessionData) ? Input::old('CheckInDateTime') :null, ['class' => 'form-control']) }}
+                </div>
+                <div class="form-group">
+                    {{Form::label('CheckOutDateTime', 'Check out Date Time') }}
+                    {{ Form::datetimeLocal('CheckOutDateTime', !empty($sessionData) ? Input::old('CheckInDateTime') : null, ['class' => 'form-control']) }}
+                </div>
+{{--                <div class="form-group" v-if="property_type === `Holiday Resort` || property_type === `NEST` || property_type === `Agri Farm Kabana`|| property_type === `Agri Farm Dining Room` || property_type === `Audio Visual Unit`">--}}
+{{--                    {{Form::label('CheckInDateTime', 'Check In Date Time') }}--}}
+{{--                    {{ Form::datetimeLocal('due_date', null, ['class' => 'form-control']) }}--}}
+
+{{--                    <div class="form-group" v-if="property_type === `Holiday Resort` || property_type === `NEST` || property_type === `Agri Farm Kabana`|| property_type === `Agri Farm Dining Room` || property_type === `Audio Visual Unit`">--}}
+{{--                        {{Form::label('CheckOutDateTime', 'Check Out Date Time') }}--}}
+{{--                        {{ Form::datetimeLocal('due_date', null, ['class' => 'form-control']) }}--}}
+
+{{--                        ===================--}}
+{{--                <div class="form-group">--}}
+{{--                    {{Form::label('StartTime', 'Start Time') }}--}}
+{{--                    {{ Form::time('StartTime', !empty($sessionData) ? Input::old('StartTime') : \Carbon\Carbon::now(),['class'=>'form-control']) }}--}}
+
+{{--                </div>--}}
+{{--                <div class="form-group">--}}
+{{--                    {{Form::label('EndTime', 'End Time') }}--}}
+{{--                    {{ Form::time('EndTime', !empty($sessionData) ? Input::old('EndTime') :  \Carbon\Carbon::now(),['class'=>'form-control']) }}--}}
+{{--                </div>--}}
 
                         <div class="form-group">
                         {{Form::label('NoOfUnits', 'Number Of Units') }}
                         {{Form::text('NoOfUnits', '',['class'=>'form-control','placeholder'=>'Number Of Units', 'v-model' => 'no_of_units', 'v-on:change'=>'checkUnitsCount'])}}
                         </div>
-                        
+
                         <div class="form-group">
                         {{Form::label('NoOfAdults', 'Number Of Adults') }}
                         {{Form::text('NoOfAdults', '',['class'=>'form-control','placeholder'=>'Number Of Adults', 'v-model' => 'no_of_adults'])}}
@@ -69,7 +97,7 @@
                         <div class="form-group">
                         {{Form::label('BookingType', 'Booking for Resource Person') }}
                         {{Form::select('BookingType', ['Resource Person' => 'Yes', ' SUSL Staff' => 'No'], null, ['placeholder' => 'Please select ...','class'=>'form-control'])}}
-                        
+
                         </div>
 
                         <div class="form-group">
@@ -77,7 +105,7 @@
                         {{Form::textarea('Description', '',['class'=>'form-control','placeholder'=>'Description'])}}
                         </div>
                         <div class="form-group">
-                        
+
                         {{-- <div class="form-group ">
                             {!! Form::label('Dean/HOD')!!}
                             {!! Form::select('Recommendation_from', $select, null, ['class'=>'form-control']) !!}
@@ -86,7 +114,7 @@
                         <!-- <div class="form-group">
                         {{Form::label('VCApproval', 'Request VC Approval') }}
                         {{Form::select('VCApproval', [1 => 'Yes', 0 => 'No'], null, ['placeholder' => 'Please select ...','class'=>'form-control'])}}
-                        
+
                         </div> -->
 
                         </br>
@@ -94,7 +122,7 @@
                         </div>
                         {!! Form::close() !!}
 
-                   
+
              </div>
         </div>
     </div>
@@ -106,18 +134,18 @@
             el: '#nest_booking',
             data() {
                 return {
-                    
+
                     room_type: {{  !empty($sessionData) ? $sessionData->NestId : 'null' }},
                     no_of_units:{{ !empty($sessionData) ? $sessionData->NoOfUnits : 0 }},
                     no_of_adults: {{ !empty($sessionData) ? $sessionData->NoOfAdults : 0 }},
-                    no_of_children:{{ !empty($sessionData) ? $sessionData->NoOfChildren : 0 }}             
+                    no_of_children:{{ !empty($sessionData) ? $sessionData->NoOfChildren : 0 }}
                 }
             },
 
             methods:{
 
                 checkUnitsCount(){
-            
+
                     if(this.room_type == 1 &&  this.no_of_units > 1){
                         this.no_of_units = 0;
                         alert('Sorry, You can not book more than 1 units.')
@@ -126,7 +154,7 @@
                         this.no_of_units = 0;
                         alert('Sorry, You can not book more than 4 units.')
                     }
-                   
+
                 },
 
                 formSubmit(){
@@ -144,11 +172,11 @@
                         }
                     }
 
-                    
+
                 }
             }
         });
 
-    </script>    
-      
+    </script>
+
 @endsection

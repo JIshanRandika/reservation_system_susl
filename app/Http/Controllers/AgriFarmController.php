@@ -45,7 +45,7 @@ class AgriFarmController extends Controller
         $af = agrifarmstay::all();
 
         return view('af', compact('select','af', 'sessionData'));
-        
+
     }
 
 
@@ -63,32 +63,42 @@ class AgriFarmController extends Controller
 
         $this->validate($request,[
             'BookingType' =>'required',
-            'CheckInDate'=>'required|date|after:yesterday',
-            'CheckOutDate'=>'required|date|after:CheckInDate',
+//            'CheckInDate'=>'required|date|after:yesterday',
+//            'CheckOutDate'=>'required|date|after:CheckInDate',
             'NoOfAdults'=>'required|numeric|min:1',
             'NoOfChildren'=>'required|numeric|min:0',
             'NoOfUnits'=>'required|numeric|min:1',
-            'Description'=>'required',   
+            'Description'=>'required',
             //'Recommendation_from'=>"required_if:BookingType,==,Resource Person,SUSL Staff",
-        ], 
+        ],
         [
             'BookingType.required' => 'Please Select Whom are You Booking For',
-            'CheckInDate.after' => 'Please Enter a Valid Date',
-            'CheckOutDate.after' => 'Please Enter a Valid Date',
+//            'CheckInDate.after' => 'Please Enter a Valid Date',
+//            'CheckOutDate.after' => 'Please Enter a Valid Date',
             'NoOfAdults.required' => 'Please Enter The Number of Adults',
             'NoOfChildren.required' => 'Please Enter The Number of Children',
             'NoOfUnits.required' => 'Please Enter The Number of Units',
             'Description.required' => 'Please Add a Description',
         ]);
-        
-        
-            $CheckInDate = agrsbooking::whereDate('CheckInDate', '<=', $request->input('CheckInDate'))->whereDate('CheckOutDate', '>=', $request->input('CheckInDate'))->where('Status', 'Confirmed')->get();
-            $CheckInDate2 = agrsbooking::whereDate('CheckInDate', '>=', $request->input('CheckInDate'))->whereDate('CheckInDate', '<=', $request->input('CheckOutDate'))->where('Status', 'Confirmed')->get();
+
+
+        $CheckInDate = agrsbooking::whereDate('CheckInDateTime', '<=', $request->input('CheckInDateTime'))
+            ->whereDate('CheckOutDateTime', '>=', $request->input('CheckInDateTime'))
+            ->where('Status', 'Request for Booking')
+            ->get();
+
+        $CheckInDate2 = agrsbooking::whereDate('CheckInDateTime', '>=', $request->input('CheckInDateTime'))
+            ->whereDate('CheckInDateTime', '<=', $request->input('CheckOutDateTime'))
+            ->where('Status', 'Request for Booking')
+            ->get();
+
+//            $CheckInDate = agrsbooking::whereDate('CheckInDate', '<=', $request->input('CheckInDate'))->whereDate('CheckOutDate', '>=', $request->input('CheckInDate'))->where('Status', 'Confirmed')->get();
+//            $CheckInDate2 = agrsbooking::whereDate('CheckInDate', '>=', $request->input('CheckInDate'))->whereDate('CheckInDate', '<=', $request->input('CheckOutDate'))->where('Status', 'Confirmed')->get();
             //dd($CheckInDate,$CheckInDate2);
             $check_cndition1 = $CheckInDate->sum('NoOfUnits') + $request->input('NoOfUnits');
             $check_cndition2 = $CheckInDate2->sum('NoOfUnits') + $request->input('NoOfUnits');
             $check_cndition3 = ($CheckInDate->sum('NoOfUnits') + $CheckInDate2->sum('NoOfUnits')) + $request->input('NoOfUnits');
-            
+
             if( $check_cndition1 > 3 || $check_cndition2 > 3 || $check_cndition3 > 3){
              //  dd("already booked");
                 // return redirect('/')->with('danger','Sorry Allready Booked!');
@@ -102,76 +112,76 @@ class AgriFarmController extends Controller
                 $totalDays =0;
                 $booking_type = KabanaPaymentType::where('booking_type',$request->BookingType)->first();
 
-                $startDate = Carbon::createFromFormat('Y-m-d',$request->CheckInDate);
-                $startDate= $startDate->addDay();
-                $endDate = Carbon::createFromFormat('Y-m-d',$request->CheckOutDate);
+//                $startDate = Carbon::createFromFormat('Y-m-d',$request->CheckInDate);
+//                $startDate= $startDate->addDay();
+//                $endDate = Carbon::createFromFormat('Y-m-d',$request->CheckOutDate);
 
 
-                $dateRange = CarbonPeriod::create($startDate, $endDate);
-                foreach($dateRange as $date){
-                    $totalDays++;
-                    if($date->isMonday()===true || $date->isTuesday()===true || $date->isWednesday()===true ||$date->isThursday()===true){
-                        // monday - tuesday
-                        $amountByDate+=$booking_type->weekdays;
-                    }else{
-                        //friday sat sun days
-                        $amountByDate+=$booking_type->weekend;
-                    }
-                }
-                $totalAmount = $amountByDate*$request->NoOfUnits;
+//                $dateRange = CarbonPeriod::create($startDate, $endDate);
+//                foreach($dateRange as $date){
+//                    $totalDays++;
+//                    if($date->isMonday()===true || $date->isTuesday()===true || $date->isWednesday()===true ||$date->isThursday()===true){
+//                        // monday - tuesday
+//                        $amountByDate+=$booking_type->weekdays;
+//                    }else{
+//                        //friday sat sun days
+//                        $amountByDate+=$booking_type->weekend;
+//                    }
+//                }
+//                $totalAmount = $amountByDate*$request->NoOfUnits;
 
 
               $agrsbooking = new agrsbooking;
               $agrsbooking-> BookingType = $request->input('BookingType');
-              $agrsbooking-> CheckInDate = $request->input('CheckInDate');
-              $agrsbooking-> CheckOutDate = $request->input('CheckOutDate');
+              $agrsbooking-> CheckInDateTime = $request->input('CheckInDateTime');
+              $agrsbooking-> CheckOutDateTime = $request->input('CheckOutDateTime');
               $agrsbooking-> NoOfAdults = $request->input('NoOfAdults');
               $agrsbooking-> NoOfChildren = $request->input('NoOfChildren');
               $agrsbooking-> NoOfUnits = $request->input('NoOfUnits');
               $agrsbooking-> Description = $request->input('Description');
               $agrsbooking-> Status = 'Request for Booking';
-              $agrsbooking->payment_total= $totalAmount;
-              
+//              $agrsbooking->payment_total= $totalAmount;
+
               if($request->input('BookingType') == "Resource Person" || $request->input('BookingType') == "SUSL Staff"){
                 $agrsbooking-> Recommendation_from = $hod[0]->id;
                 // $agrsbooking-> VCApproval = $request->input('VCApproval');
-                
+
               }
               else{
                 $agrsbooking-> Recommendation_from = 13;
                 //$agrsbooking-> VCApproval = 0;
-              
+
               }
-              
+
               $agrsbooking-> GuestId = Auth::user()->id;
               $agrsbooking-> GuestName = Auth::user()->name;
               $agrsbooking-> AgriFarmStayId = 1;
               $agrsbooking->save();
-  
+
               $data = array(
                   'id'      =>  Auth::user()->id,
                   'name'      =>  Auth::user()->name,
-                  'CheckInDate'=>$request->input('CheckInDate'),
-                  'CheckOutDate'=>$request->input('CheckOutDate'),
+                  'CheckInDateTime'=>$request->input('CheckInDateTime'),
+                  'CheckOutDateTime'=>$request->input('CheckOutDateTime'),
                   'NoOfUnits'=>$request->input('NoOfUnits'),
                   'Description'=>$request->input('Description')
               );
-      
+
 
               //$Recommendation_From = $request->input('Recommendation_from');
               $email = DB::select('select email from users where id = 11');
 
-                    
+
                     Mail::to($email)->send(new agriemail($data));
                     return back()->with('success', 'Request Sent Successfuly!');
              }
-      
-          
-           
-            
-            
+
+
+
+
+
                 return redirect('/')->with('success','Sorry Allready Booked!');
-            
+
         }
 
         public function cancelBooking($id){

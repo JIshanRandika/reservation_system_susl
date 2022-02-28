@@ -15,13 +15,13 @@ use DB;
 use Session;
 use Illuminate\Support\Facades\Input;
 
-//to handle Agri dinning booking details 
+//to handle Agri dinning booking details
 class AgriDinningController extends Controller
 {
 
 
     public function getdinning(){
-       
+
         $sessionData = [];
 
         // Check the availability session exist or not
@@ -52,12 +52,12 @@ class AgriDinningController extends Controller
     }
 
 
-  
+
 
 
 //     public function dropDownShow()
 // {
-  
+
 //         //$Users = User::all();
 //         $Users = User::where('roleNo','>=', 11)->get();
 //         $select = [];
@@ -65,7 +65,7 @@ class AgriDinningController extends Controller
 //             $select[$User->id] = $User->name;
 //         }
 //         return view('afd', compact('select'));
-      
+
 // }
 
 
@@ -97,7 +97,7 @@ class AgriDinningController extends Controller
             'StartTime'=>'required|after:CurrentTime',
             'EndTime'=>'required|after:StartTime',
             'Description'=>'required',
-            
+
         ],
         [
             'NoOfGuest.required' => 'Please Add the Number of Guests',
@@ -105,18 +105,18 @@ class AgriDinningController extends Controller
             'StartTime.after' => 'Please Enter a Valid Start Time',
             'EndTime.after' => 'Please Enter a Valid End Time',
             'Description.required' => 'Please Add a Description',
-            
+
         ]);
         }
         else{
-                
+
             $this->validate($request,[
                 'NoOfGuest'=>'required|numeric|min:1',
                 'CheckInDate'=>'required|date|after:yesterday',
                 'StartTime'=>'required',
                 'EndTime'=>'required|after:StartTime',
                 'Description'=>'required',
-                
+
             ],
             [
                 'NoOfGuest.required' => 'Please Add the Number of Guests',
@@ -124,10 +124,10 @@ class AgriDinningController extends Controller
                 'StartTime.after' => 'Please Enter a Valid Start Time',
                 'EndTime.after' => 'Please Enter a Valid End Time',
                 'Description.required' => 'Please Add a Description',
-                
+
             ]);
    }
-        							
+
         $agridbooking = new agridbooking;
         $agridbooking-> CheckInDate = $request->input('CheckInDate');
         $agridbooking-> StartTime = $request->input('StartTime');
@@ -169,20 +169,20 @@ class AgriDinningController extends Controller
 
         //$CheckInDate = avubooking::where(['CheckInDate' => $request->input('CheckInDate'), 'Status' => 'Conformed'])->get();
        $CheckInDate = agridbooking::where('CheckInDate', '=', $request->input('CheckInDate'))->first();
-        
+
         if ($CheckInDate === null) {
-        
-            
+
+
                 $agridbooking->save();
                 Mail::to($email)->send(new agriemail($data));
                 return back()->with('success', 'Request Sent Successfuly!');
 
                 //return redirect('/')->with('success','Request Sent Successfuly !');
-            
+
         }else{
             $CheckInDate = agridbooking::whereTime('StartTime', '<', $request->input('StartTime'))->whereTime('EndTime', '>', $request->input('StartTime'))->where('CheckInDate', '=', $request->input('CheckInDate'))->where('Status', 'Confirmed')->get();
             $CheckInDate2 = agridbooking::whereTime('StartTime', '>', $request->input('StartTime'))->whereTime('StartTime', '<', $request->input('EndTime'))->where('CheckInDate', '=', $request->input('CheckInDate'))->where('Status', 'Confirmed')->get();
-           
+
             if(count($CheckInDate) > 0 || count($CheckInDate2) > 0){
                // dd("already booked");
                 return redirect('/')->with('success','Sorry Allready Booked!');
@@ -193,9 +193,9 @@ class AgriDinningController extends Controller
                 return back()->with('success', 'Request Sent Successfuly!');
             }
         }
-        
-        
+
+
             return redirect('/')->with('success','Sorry Allready Booked!');
-        
+
     }
 }

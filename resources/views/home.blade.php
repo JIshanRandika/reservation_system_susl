@@ -23,13 +23,13 @@
                         <div class="form-group">
                         {{Form::label('property', 'Please Select a Property ') }}
                         {{Form::select('property', ['Holiday Resort' => 'Holiday Resort', 'NEST' => 'NEST','Agri Farm Kabana' => 'Agri Farm Kabana', 'Agri Farm Dining Room' => 'Agri Farm Dining Room', 'Audio Visual Unit' => 'Audio Visual Unit'], null, ['class'=>'form-control','v-model' => 'property_type'])}}
-                            
+
                         </div>
 
                        <div class="form-group" v-if="property_type === `Holiday Resort`">
                              {!! Form::label('Room Type')!!}
                             {!! Form::select('HolodayResortId', $hrfill, null, ['class'=>'form-control', 'v-model' => 'room_type_hr']) !!}
-                    
+
                         </div>
 
                           <div class="form-group " v-if="property_type === `NEST`">
@@ -38,25 +38,40 @@
                         </div>
 
 
-                        <div class="form-group" v-if="property_type === `Holiday Resort` || property_type === `NEST` || property_type === `Agri Farm Kabana`|| property_type === `Agri Farm Dining Room` || property_type === `Audio Visual Unit`">
-                        {{Form::label('CheckInDate', 'Check In Date') }}
-                        {{ Form::date('CheckInDate', new \DateTime(), ['class' => 'form-control']) }}
-                       
-                        </div>
-                        <div class="form-group" v-if="property_type === `Holiday Resort` || property_type === `NEST` || property_type === `Agri Farm Kabana`">
-                        {{Form::label('CheckOutDate', 'Check Out Date') }}
-                        {{ Form::date('CheckOutDate', new \DateTime(), ['class' => 'form-control']) }}
-                        </div>
+
+
+                <div class="form-group" v-if="property_type === `Agri Farm Dining Room` || property_type === `Audio Visual Unit`">
+                    {{Form::label('CheckInDate', 'Check In Date') }}
+                    {{ Form::date('CheckInDate', new \DateTime(), ['class' => 'form-control']) }}
+
+                </div>
+
+{{--                        <div class="form-group" v-if="property_type === `Holiday Resort` || property_type === `NEST` || property_type === `Agri Farm Kabana`">--}}
+{{--                        {{Form::label('CheckOutDate', 'Check Out Date') }}--}}
+{{--                        {{ Form::date('CheckOutDate', new \DateTime(), ['class' => 'form-control']) }}--}}
+
+{{--                        </div>--}}
+
+{{--                ===============--}}
+                <div class="form-group" v-if="property_type === `Holiday Resort` || property_type === `NEST` || property_type === `Agri Farm Kabana`">
+                    {{Form::label('CheckInDateTime', 'Check In Date Time') }}
+                    {{ Form::datetimeLocal('CheckInDateTime', null, ['class' => 'form-control']) }}
+                </div>
+                    <div class="form-group" v-if="property_type === `Holiday Resort` || property_type === `NEST` || property_type === `Agri Farm Kabana`">
+                        {{Form::label('CheckOutDateTime', 'Check Out Date Time') }}
+                        {{ Form::datetimeLocal('CheckOutDateTime', null, ['class' => 'form-control']) }}
+                    </div>
+{{--                Edit--}}
 
                         <div class="form-group" v-if="property_type === `Agri Farm Dining Room` || property_type === `Audio Visual Unit`">
                         {{Form::label('StartTime', 'Start Time') }}
                         {{ Form::time('StartTime', \Carbon\Carbon::now(),  ['class'=>'form-control']) }}
-                       
+
                         </div>
                         <div hidden class="form-group" v-if="property_type === `Agri Farm Dining Room` || property_type === `Audio Visual Unit`">
                         {{Form::label('CurrentTime', 'Current Time') }}
                         {{ Form::time('CurrentTime', \Carbon\Carbon::now(),  ['class'=>'form-control']) }}
-                       
+                {{--                Edit--}}
                         </div>
                         <div class="form-group" v-if="property_type === `Agri Farm Dining Room` || property_type === `Audio Visual Unit`">
                         {{Form::label('EndTime', 'End Time') }}
@@ -65,9 +80,9 @@
 
                         <div class="form-group" v-if="property_type === `Holiday Resort` || property_type === `NEST` || property_type === `Agri Farm Kabana`">
                         {{Form::label('NoOfUnits', 'Number Of Units') }}
-                        {{Form::text('NoOfUnits', '',['class'=>'form-control','placeholder'=>'Number Of Units', 'v-model' => 'no_of_units', 'v-on:change'=>'checkUnitsCount'])}} 
+                        {{Form::text('NoOfUnits', '',['class'=>'form-control','placeholder'=>'Number Of Units', 'v-model' => 'no_of_units', 'v-on:change'=>'checkUnitsCount'])}}
                         </div>
-                      
+
                         <div class="form-group" v-if="property_type === `Holiday Resort` || property_type === `NEST` || property_type === `Agri Farm Kabana`">
                          {{Form::label('NoOfAdults', 'Number Of Adults') }}
                         {{Form::text('NoOfAdults', '',['class'=>'form-control','placeholder'=>'Number Of Adults', 'v-model' => 'no_of_adults'])}}
@@ -77,10 +92,10 @@
                         {{Form::text('NoOfChildren', '',['class'=>'form-control','placeholder'=>'Number Of Children', 'v-model' => 'no_of_children'])}}
                         </div>
 
-                        
-                      
 
-                      
+
+
+
 
                         </br>
                         {{Form::button('Check', ['class'=>'btn btn-primary', 'v-on:click'=>'formSubmit'])}}
@@ -104,7 +119,7 @@
                     room_type_nest:null,
                     no_of_units:0,
                     no_of_adults:0,
-                    no_of_children:0               
+                    no_of_children:0
                 }
             },
 
@@ -113,10 +128,10 @@
 //'Holiday Resort' => 'Holiday Resort', 'NEST' => 'NEST','Agri Farm Kabana' => 'Agri Farm Kabana', 'Agri Farm Dining Room' => 'Agri Farm Dining Room', 'Audio Visual Unit' => 'Audio Visual Unit'
 //
 //
-                
+
 
                 checkUnitsCount(){
-            
+
                     if(this.room_type_hr == 1 &&  this.no_of_units > 7){
                         this.no_of_units = 0;
                         alert('Sorry, You can not book more than 7 units.')
@@ -139,11 +154,11 @@
                         this.no_of_units = 0;
                         alert('Sorry, You can not book more than 3 units.')
                     }
-                   
+
                 },
 
                 formSubmit(){
-            
+
                     if(this.room_type_hr == 1){
                         if(this.no_of_adults > 2*this.no_of_units || this.no_of_children > 1*this.no_of_units){
                             alert("Sorry, the maximum number of people that can be accommodated has been exceeded.");
@@ -180,24 +195,24 @@
                     }
 
                      else if(this.property_type == `Agri Farm Dining Room`){
-                        
+
                             $("#check_form").submit();
-                       
+
                     }
 
                      else if(this.property_type == `Audio Visual Unit`){
-                        
+
                             $("#check_form").submit();
-                        
+
                     }
 
-                    
+
                 }
             }
         });
 
-    </script>    
-        
+    </script>
+
 
 @endsection
 

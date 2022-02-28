@@ -34,7 +34,7 @@ class NestController extends Controller
                 $sessionData=NULL;
             }
         }
- 
+
         $nest = nest::all();
         $nestdetail = DB::select('select * from nests');
         $nestfill = [];
@@ -46,13 +46,13 @@ class NestController extends Controller
         foreach($Users as $User){
             $select[$User->id] = $User->name;
         }
-        
+
         return view('nest', compact('select','nestfill','nest', 'sessionData'));
 
         //return view('nest')->with('nest',$nest);
     }
 
-  
+
 
 
 
@@ -65,24 +65,28 @@ class NestController extends Controller
         ->where('Department', '=', [$Department])
         ->where('Designation', '=', 'Head of The Department')
         ->get();
-     
-            
+
+
 //dd( $hod[0]->id,$Department);
         $this->validate($request,[
-            'CheckInDate'=>'required|date|after:yesterday',
-            'CheckOutDate'=>'required|date|after:CheckInDate',
+//            'CheckInDate'=>'required|date|after:yesterday',
+//            'CheckOutDate'=>'required|date|after:CheckInDate',
+//
+//            'StartTime'=>'required',
+//            'EndTime'=>'required',
+
             'NoOfAdults'=>'required|numeric|min:1',
             'NoOfUnits'=>'required|numeric|min:1',
             'NoOfChildren'=>'required|numeric|min:0',
             'Description'=>'required',
             'BookingType'=>'required',
             //'Recommendation_from'=>'required',
-            
-        ], 
+
+        ],
         [
             'BookingType.required' => 'Please Select Whom are You Booking For',
-            'CheckInDate.after' => 'Please Enter a Valid Date',
-            'CheckOutDate.after' => 'Please Enter a Valid Date',
+//            'CheckInDate.after' => 'Please Enter a Valid Date',
+//            'CheckOutDate.after' => 'Please Enter a Valid Date',
             'NoOfAdults.required' => 'Please Enter The Number of Adults',
             'NoOfChildren.required' => 'Please Enter The Number of Children',
             'NoOfUnits.required' => 'Please Enter The Number of Units',
@@ -91,41 +95,98 @@ class NestController extends Controller
         ]);
 
         // payment calculate
-        $startDate = Carbon::createFromFormat('Y-m-d',$request->CheckInDate);
-        $endDate = Carbon::createFromFormat('Y-m-d',$request->CheckOutDate);
+//        $startDate = Carbon::createFromFormat('Y-m-d',$request->CheckInDate);
+//        $endDate = Carbon::createFromFormat('Y-m-d',$request->CheckOutDate);
+
+//        $startDate = Carbon::parse($request->CheckInDateTime)->format('Y-m-d');
+//        $endDate = Carbon::parse($request->CheckOutDateTime)->format('Y-m-d');
+
+//        $startDate = Carbon::createFromFormat('Y-m-d',$request->CheckInDateTime->toDateString());
+//        $endDate = Carbon::createFromFormat('Y-m-d',$request->CheckOutDateTime->toDateString());
+
+//        $startDate = Carbon::parse('Y-m-d HH:mm:ss',$request->CheckInDateTime);
+//        $endDate = Carbon::parse('Y-m-d HH:mm:ss',$request->CheckOutDateTime);
 
 
-        $dateRange = CarbonPeriod::create($startDate, $endDate);
+//        $dateRange = CarbonPeriod::create($startDate, $endDate);
 
-        $totalDayObj =$startDate->diff($endDate);
-        $totalDays = $totalDayObj->format('%a');
+//        $totalDayObj = ($request->CheckOutDateTime)->diffForHumans($request->CheckInDateTime);
 
-        $nestPayment = NestPayment::where('booking_type',$request->input('BookingType'))->first();
-        $noOfUnits = $request->input('NoOfUnits');
+//        $totalDayObj =$startDate->diff($endDate);
+//        $startTime = Carbon::parse('2020-02-11 04:04:26');
+//        $endTime = Carbon::parse('2020-02-11 04:36:56');
+//
+//        $totalDayObj = $endTime->diffForHumans($startTime);
 
-        $totalPayments = 0;
-        
+//        $mystartdate =
+
+//        $startDate = \DateTime::createFromFormat('Y-m-d',$request->CheckInDateTime);
+//        $endDate = \DateTime::createFromFormat('Y-m-d',$request->CheckOutDateTime);
+//
+//        $totalDayObj =$startDate->diff($endDate);
+//
+//        $totalDays = $totalDayObj->format('%a');
+//
+//        $nestPayment = NestPayment::where('booking_type',$request->input('BookingType'))->first();
+//        $noOfUnits = $request->input('NoOfUnits');
+//
+//        $totalPayments = 0;
+
         if($request->input('NestId') == 1){
             //Master bed room
-            
-            $CheckInDate = nestbooking::whereDate('CheckInDate', '<=', $request->input('CheckInDate'))->whereDate('CheckOutDate', '>=', $request->input('CheckInDate'))->where('Status', 'Confirmed')->get();
-            $CheckInDate2 = nestbooking::whereDate('CheckInDate', '>=', $request->input('CheckInDate'))->whereDate('CheckInDate', '<=', $request->input('CheckOutDate'))->where('Status', 'Confirmed')->get();
-           // dd($CheckInDate,$CheckInDate2);
-            
+
+//            $CheckInDate = nestbooking::whereDate('CheckInDate', '<=', $request->input('CheckInDate'))->whereDate('CheckOutDate', '>=', $request->input('CheckInDate'))->where('Status', 'Confirmed')->get();
+            $CheckInDate = nestbooking::whereDate('CheckInDateTime', '<=', $request->input('CheckInDateTime'))
+                ->whereDate('CheckOutDateTime', '>=', $request->input('CheckInDateTime'))
+                ->where('Status', 'Request for Booking')
+                ->get();
+
+            $CheckInDate2 = nestbooking::whereDate('CheckInDateTime', '>=', $request->input('CheckInDateTime'))
+                ->whereDate('CheckInDateTime', '<=', $request->input('CheckOutDateTime'))
+                ->where('Status', 'Request for Booking')
+                ->get();
+
+//            $CheckInDate0 = nestbooking::where()
+
+
+//            $CheckInDate = nestbooking::whereDateTime('StartDateTIme', '<=',  date_time_set($request->input('CheckInDate')+' '+$request->input('StartTime')))
+//                ->where('EndDateTIme', '>=', date_time_set($request->input('CheckInDate')+' '+$request->input('StartTime')))
+//                ->where('Status', 'Confirmed')
+//                ->get();
+//
+//
+//            $CheckInDate2 = nestbooking::whereDate('StartDateTIme', '>=', date_time_set($request->input('CheckInDate')+' '+$request->input('StartTime')))
+//                ->where('StartDateTIme', '<=', date_time_set($request->input('CheckOutDate')+' '+$request->input('EndTime')))
+//                ->where('Status', 'Request for Booking')
+//                ->get();
+
+//            $CheckInDate2 = nestbooking::whereDate('CheckInDate', '>=', $request->input('CheckInDate'))->whereDate('CheckInDate', '<=', $request->input('CheckOutDate'))->where('Status', 'Confirmed')->get();
+
+            // dd($CheckInDate,$CheckInDate2);
+
+
            $check_cndition1 = $CheckInDate->sum('NoOfUnits') + $request->input('NoOfUnits');
            $check_cndition2 = $CheckInDate2->sum('NoOfUnits') + $request->input('NoOfUnits');
            $check_cndition3 = ($CheckInDate->sum('NoOfUnits') + $CheckInDate2->sum('NoOfUnits')) + $request->input('NoOfUnits');
-           
+
            if( $check_cndition1 > 1 || $check_cndition2 > 1 || $check_cndition3 > 1){
               // dd("already booked");
                  return redirect('/')->with('success','Sorry Allready Booked!');
              }else{
               // dd("available");
 
-               $totalPayments = $nestPayment->master * $totalDays * $noOfUnits;
+//               $totalPayments = $nestPayment->master * $totalDays * $noOfUnits;
               $nestbooking = new nestbooking;
-              $nestbooking-> CheckInDate = $request->input('CheckInDate');
-              $nestbooking-> CheckOutDate = $request->input('CheckOutDate');
+//              $nestbooking-> CheckInDate = $request->input('CheckInDate');
+//              $nestbooking-> CheckOutDate = $request->input('CheckOutDate');
+//
+//               $nestbooking-> StartTime = $request->input('StartTime');
+//               $nestbooking-> EndTime = $request->input('EndTime');
+
+               $nestbooking-> CheckInDateTime = $request->input('CheckInDateTime');
+               $nestbooking-> CheckOutDateTime = $request->input('CheckOutDateTime');
+
+
               $nestbooking-> NoOfAdults = $request->input('NoOfAdults');
               $nestbooking-> NoOfChildren = $request->input('NoOfChildren');
               $nestbooking-> NoOfUnits = $request->input('NoOfUnits');
@@ -138,58 +199,84 @@ class NestController extends Controller
               $nestbooking-> GuestId = Auth::user()->id;
               $nestbooking-> GuestName = Auth::user()->name;
               $nestbooking-> NestId = $request->input('NestId');
-               $nestbooking->payment_amount= $totalPayments;
-      
-      
+//               $nestbooking->payment_amount= $totalPayments;
+
+
               $data = array(
                   'id'      =>  Auth::user()->id,
                   'name'      =>  Auth::user()->name,
-                  'CheckInDate'=>$request->input('CheckInDate'),
-                  'CheckOutDate'=>$request->input('CheckOutDate'),
+//                  'CheckInDate'=>$request->input('CheckInDate'),
+//                  'CheckOutDate'=>$request->input('CheckOutDate'),
+
+
+//                  'StartTime'=>$request->input('StartTime'),
+//                  'EndTime'=>$request->input('EndTime'),
+
+                  'CheckInDateTime'=>$request->input('CheckInDateTime'),
+                  'CheckOutDateTime'=>$request->input('CheckOutDateTime'),
+
                   'NoOfAdults'=>$request->input('NoOfAdults'),
                   'NoOfChildren'=>$request->input('NoOfChildren'),
                   'NoOfUnits'=>$request->input('NoOfUnits'),
                   'Description'=>$request->input('Description'),
                   'BookingType'=>$request->input('BookingType'),
                   'NestId'=>$request->input('NestId'),
-                  
+
               );
-      
+
               //$Recommendation_From = $request->input('Recommendation_from');
               $email = DB::select('select email from users where id = 10');
-             
-      
+
+
               $nestbooking->save();
               Mail::to($email)->send(new nestemail($data));
               return back()->with('success', 'Request Sent Successfuly!');
              }
         }
 
-       
+
 
         if($request->input('NestId') == 2){
             //Master bed room
-            
-            $CheckInDate = nestbooking::whereDate('CheckInDate', '<=', $request->input('CheckInDate'))->whereDate('CheckOutDate', '>=', $request->input('CheckInDate'))->where('Status', 'Confirmed')->get();
-            $CheckInDate2 = nestbooking::whereDate('CheckInDate', '>=', $request->input('CheckInDate'))->whereDate('CheckInDate', '<=', $request->input('CheckOutDate'))->where('Status', 'Confirmed')->get();
+
+            $CheckInDate = nestbooking::whereDate('CheckInDateTime', '<=', $request->input('CheckInDateTime'))
+                ->whereDate('CheckOutDateTime', '>=', $request->input('CheckInDateTime'))
+                ->where('Status', 'Request for Booking')
+                ->get();
+
+            $CheckInDate2 = nestbooking::whereDate('CheckInDateTime', '>=', $request->input('CheckInDateTime'))
+                ->whereDate('CheckInDateTime', '<=', $request->input('CheckOutDateTime'))
+                ->where('Status', 'Request for Booking')
+                ->get();
+
+//            $CheckInDate = nestbooking::whereDate('CheckInDate', '<=', $request->input('CheckInDate'))->whereDate('CheckOutDate', '>=', $request->input('CheckInDate'))->where('Status', 'Confirmed')->get();
+//            $CheckInDate2 = nestbooking::whereDate('CheckInDate', '>=', $request->input('CheckInDate'))->whereDate('CheckInDate', '<=', $request->input('CheckOutDate'))->where('Status', 'Confirmed')->get();
            // dd($CheckInDate,$CheckInDate2);
-            
+
            $check_cndition1 = $CheckInDate->sum('NoOfUnits') + $request->input('NoOfUnits');
            $check_cndition2 = $CheckInDate2->sum('NoOfUnits') + $request->input('NoOfUnits');
            $check_cndition3 = ($CheckInDate->sum('NoOfUnits') + $CheckInDate2->sum('NoOfUnits')) + $request->input('NoOfUnits');
-           
+
            if( $check_cndition1 > 4 || $check_cndition2 > 4 || $check_cndition3 > 4){
               // dd("already booked");
                  return redirect('/')->with('success','Sorry Allready Booked!');
              }else{
               // dd("available");
 
-               $totalPayments = $nestPayment->single * $totalDays * $noOfUnits;
+//               $totalPayments = $nestPayment->single * $totalDays * $noOfUnits;
 
               $nestbooking = new nestbooking;
-              $nestbooking-> CheckInDate = $request->input('CheckInDate');
-              $nestbooking-> CheckOutDate = $request->input('CheckOutDate');
-              $nestbooking-> NoOfAdults = $request->input('NoOfAdults');
+//              $nestbooking-> CheckInDate = $request->input('CheckInDate');
+//              $nestbooking-> CheckOutDate = $request->input('CheckOutDate');
+
+//               $nestbooking-> StartTime = $request->input('StartTime');
+//               $nestbooking-> EndTime = $request->input('EndTime');
+
+               $nestbooking-> CheckInDateTime = $request->input('CheckInDateTime');
+               $nestbooking-> CheckOutDateTime = $request->input('CheckOutDateTime');
+
+
+               $nestbooking-> NoOfAdults = $request->input('NoOfAdults');
               $nestbooking-> NoOfChildren = $request->input('NoOfChildren');
               $nestbooking-> NoOfUnits = $request->input('NoOfUnits');
               $nestbooking-> Description = $request->input('Description');
@@ -200,26 +287,34 @@ class NestController extends Controller
               $nestbooking-> GuestId = Auth::user()->id;
               $nestbooking-> GuestName = Auth::user()->name;
               $nestbooking-> NestId = $request->input('NestId');
-              $nestbooking->payment_amount= $totalPayments;
-      
+//              $nestbooking->payment_amount= $totalPayments;
+
               $data = array(
                   'id'      =>  Auth::user()->id,
                   'name'      =>  Auth::user()->name,
-                  'CheckInDate'=>$request->input('CheckInDate'),
-                  'CheckOutDate'=>$request->input('CheckOutDate'),
+//                  'CheckInDate'=>$request->input('CheckInDate'),
+//                  'CheckOutDate'=>$request->input('CheckOutDate'),
+
+
+//                  'StartTime'=>$request->input('StartTime'),
+//                  'EndTime'=>$request->input('EndTime'),
+
+                  'CheckInDateTime'=>$request->input('CheckInDateTime'),
+                  'CheckOutDateTime'=>$request->input('CheckOutDateTime'),
+
                   'NoOfAdults'=>$request->input('NoOfAdults'),
                   'NoOfChildren'=>$request->input('NoOfChildren'),
                   'NoOfUnits'=>$request->input('NoOfUnits'),
                   'Description'=>$request->input('Description'),
                   'BookingType'=>$request->input('BookingType'),
                   'NestId'=>$request->input('NestId'),
-                  
+
               );
-      
+
               //$Recommendation_From = $request->input('Recommendation_from');
               $email = DB::select('select email from users where id = 10');
-             
-      
+
+
               $nestbooking->save();
               Mail::to($email)->send(new nestemail($data));
               return back()->with('success', 'Request Sent Successfuly!');

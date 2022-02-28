@@ -49,7 +49,7 @@ class HrController extends Controller
 
         return view('hr', compact('select','hrfill','hr', 'sessionData'));
 
-        
+
     }
 
 
@@ -63,30 +63,30 @@ class HrController extends Controller
         ->get();
 
         $this->validate($request,[
-           
+
 
             'BookingType' =>'required',
-            'CheckInDate'=>'required|date|after:yesterday',
-            'CheckOutDate'=>'required|date|after:CheckInDate',
+//            'CheckInDate'=>'required|date|after:yesterday',
+//            'CheckOutDate'=>'required|date|after:CheckInDate',
             'NoOfAdults'=>'required|numeric|min:1',
             'NoOfChildren'=>'required|numeric|min:0',
             'NoOfUnits'=>'required|numeric|min:1',
-            'Description'=>'required', 
+            'Description'=>'required',
            // 'Recommendation_from'=>"required_if:BookingType,==,Resource Person,SUSL Staff",
             'HolodayResortId'=>'required',
         ]);
 
 
         // payment calculate
-        $startDate = Carbon::createFromFormat('Y-m-d',$request->CheckInDate);
-        $endDate = Carbon::createFromFormat('Y-m-d',$request->CheckOutDate);
-
-
-        $dateRange = CarbonPeriod::create($startDate, $endDate);
-
-        $totalDaysObj =$startDate->diff($endDate);
-        $totalDays =$totalDaysObj->format('%a');
-        $holidayPayment = HoliydayResortPayment::where('booking_type',$request->input('BookingType'))->first();
+//        $startDate = Carbon::createFromFormat('Y-m-d',$request->CheckInDate);
+//        $endDate = Carbon::createFromFormat('Y-m-d',$request->CheckOutDate);
+//
+//
+//        $dateRange = CarbonPeriod::create($startDate, $endDate);
+//
+//        $totalDaysObj =$startDate->diff($endDate);
+//        $totalDays =$totalDaysObj->format('%a');
+//        $holidayPayment = HoliydayResortPayment::where('booking_type',$request->input('BookingType'))->first();
 
 
         $totalPayments = 0;
@@ -96,15 +96,23 @@ class HrController extends Controller
             //Master bed room
             //$bookings1 = hrbooking::whereBetween('CheckInDate', [$request->input('CheckInDate'), $request->input('CheckOutDate')])->get();
             //$bookings2 = hrbooking::whereBetween('CheckOutDate', [$request->input('CheckInDate'), $request->input('CheckOutDate')])->get();
+            $CheckInDate = hrbooking::whereDate('CheckInDateTime', '<=', $request->input('CheckInDateTime'))
+                ->whereDate('CheckOutDateTime', '>=', $request->input('CheckInDateTime'))
+                ->where('Status', 'Request for Booking')
+                ->get();
 
-            $CheckInDate = hrbooking::whereDate('CheckInDate', '<=', $request->input('CheckInDate'))->whereDate('CheckOutDate', '>=', $request->input('CheckInDate'))->where('HolodayResortId', '1')->where('Status', 'Confirmed')->get();
-            $CheckInDate2 = hrbooking::whereDate('CheckInDate', '>=', $request->input('CheckInDate'))->whereDate('CheckInDate', '<=', $request->input('CheckOutDate'))->where('HolodayResortId', '1')->where('Status', 'Confirmed')->get();
+            $CheckInDate2 = hrbooking::whereDate('CheckInDateTime', '>=', $request->input('CheckInDateTime'))
+                ->whereDate('CheckInDateTime', '<=', $request->input('CheckOutDateTime'))
+                ->where('Status', 'Request for Booking')
+                ->get();
+//            $CheckInDate = hrbooking::whereDate('CheckInDate', '<=', $request->input('CheckInDate'))->whereDate('CheckOutDate', '>=', $request->input('CheckInDate'))->where('HolodayResortId', '1')->where('Status', 'Confirmed')->get();
+//            $CheckInDate2 = hrbooking::whereDate('CheckInDate', '>=', $request->input('CheckInDate'))->whereDate('CheckInDate', '<=', $request->input('CheckOutDate'))->where('HolodayResortId', '1')->where('Status', 'Confirmed')->get();
             //dd($CheckInDate->sum('NoOfUnits'),$CheckInDate2);
 
             $check_cndition1 = $CheckInDate->sum('NoOfUnits') + $request->input('NoOfUnits');
             $check_cndition2 = $CheckInDate2->sum('NoOfUnits') + $request->input('NoOfUnits');
             $check_cndition3 = ($CheckInDate->sum('NoOfUnits') + $CheckInDate2->sum('NoOfUnits')) + $request->input('NoOfUnits');
-            
+
             if( $check_cndition1 > 7 || $check_cndition2 > 7 || $check_cndition3 > 7){
              //  dd("already booked");
                 // return redirect('/')->with('danger','Sorry Allready Booked!');
@@ -117,13 +125,16 @@ class HrController extends Controller
 
 
                 // master room
-                    $totalPayments = $holidayPayment->master * $totalDays * (+$request->input('NoOfUnits'));
+//                    $totalPayments = $holidayPayment->master * $totalDays * (+$request->input('NoOfUnits'));
 
-                
+
                     $hrbooking = new hrbooking;
                     $hrbooking-> BookingType = $request->input('BookingType');
-                    $hrbooking-> CheckInDate = $request->input('CheckInDate');
-                    $hrbooking-> CheckOutDate = $request->input('CheckOutDate');
+                    $hrbooking-> CheckInDateTime = $request->input('CheckInDateTime');
+                    $hrbooking-> CheckOutDateTime = $request->input('CheckOutDateTime');
+
+//                    $hrbooking-> CheckInDateTime = $request->input('CheckInDateTime');
+
                     $hrbooking-> NoOfAdults = $request->input('NoOfAdults');
                     $hrbooking-> NoOfChildren = $request->input('NoOfChildren');
                     $hrbooking-> NoOfUnits = $request->input('NoOfUnits');
@@ -134,14 +145,14 @@ class HrController extends Controller
                     if($request->input('BookingType') == "Resource Person" || $request->input('BookingType') == "SUSL Staff"){
                         $hrbooking-> Recommendation_from = $hod[0]->id;
                         //$hrbooking-> VCApproval = $request->input('VCApproval');
-                        
+
                       }
                       else{
                         $hrbooking-> Recommendation_from = 13;
                         //$hrbooking-> VCApproval = 0;
-                        
+
                       }
-                      
+
                     $hrbooking-> GuestId = Auth::user()->id;
                     $hrbooking-> GuestName = Auth::user()->name;
                     $hrbooking-> HolodayResortId =  $request->input('HolodayResortId');
@@ -151,8 +162,8 @@ class HrController extends Controller
                     $data = array(
                         'id'      =>  Auth::user()->id,
                         'name'      =>  Auth::user()->name,
-                        'CheckInDate'=>$request->input('CheckInDate'),
-                        'CheckOutDate'=>$request->input('CheckOutDate'),
+                        'CheckInDateTime'=>$request->input('CheckInDateTime'),
+                        'CheckOutDateTime'=>$request->input('CheckOutDateTime'),
                         'NoOfUnits'=>$request->input('NoOfUnits'),
                         'Description'=>$request->input('Description')
                     );
@@ -161,26 +172,34 @@ class HrController extends Controller
                    $email = DB::select('select email from users where id = 12');
                     //$CheckInDate = hrbooking::where('CheckInDate', '=', $request->input('CheckInDate'))->first();
 
-                    
+
                    Mail::to($email)->send(new hremail($data));
                     return back()->with('success', 'Request Sent Successfuly!');
              }
         }
-        
+
 
         if($request->input('HolodayResortId') == 2){
             //Master bed room
             //$bookings1 = hrbooking::whereBetween('CheckInDate', [$request->input('CheckInDate'), $request->input('CheckOutDate')])->get();
             //$bookings2 = hrbooking::whereBetween('CheckOutDate', [$request->input('CheckInDate'), $request->input('CheckOutDate')])->get();
+            $CheckInDate = hrbooking::whereDate('CheckInDateTime', '<=', $request->input('CheckInDateTime'))
+                ->whereDate('CheckOutDateTime', '>=', $request->input('CheckInDateTime'))
+                ->where('Status', 'Request for Booking')
+                ->get();
 
-            $CheckInDate = hrbooking::whereDate('CheckInDate', '<=', $request->input('CheckInDate'))->whereDate('CheckOutDate', '>=', $request->input('CheckInDate'))->where('HolodayResortId', '2')->where('Status', 'Confirmed')->get();
-            $CheckInDate2 = hrbooking::whereDate('CheckInDate', '>=', $request->input('CheckInDate'))->whereDate('CheckInDate', '<=', $request->input('CheckOutDate'))->where('HolodayResortId', '2')->where('Status', 'Confirmed')->get();
+            $CheckInDate2 = hrbooking::whereDate('CheckInDateTime', '>=', $request->input('CheckInDateTime'))
+                ->whereDate('CheckInDateTime', '<=', $request->input('CheckOutDateTime'))
+                ->where('Status', 'Request for Booking')
+                ->get();
+//            $CheckInDate = hrbooking::whereDate('CheckInDate', '<=', $request->input('CheckInDate'))->whereDate('CheckOutDate', '>=', $request->input('CheckInDate'))->where('HolodayResortId', '2')->where('Status', 'Confirmed')->get();
+//            $CheckInDate2 = hrbooking::whereDate('CheckInDate', '>=', $request->input('CheckInDate'))->whereDate('CheckInDate', '<=', $request->input('CheckOutDate'))->where('HolodayResortId', '2')->where('Status', 'Confirmed')->get();
             //dd($CheckInDate->sum('NoOfUnits'),$CheckInDate2);
 
             $check_cndition1 = $CheckInDate->sum('NoOfUnits') + $request->input('NoOfUnits');
             $check_cndition2 = $CheckInDate2->sum('NoOfUnits') + $request->input('NoOfUnits');
             $check_cndition3 = ($CheckInDate->sum('NoOfUnits') + $CheckInDate2->sum('NoOfUnits')) + $request->input('NoOfUnits');
-            
+
             if( $check_cndition1 > 28 || $check_cndition2 > 28 || $check_cndition3 > 28){
              //  dd("already booked");
                 // return redirect('/')->with('danger','Sorry Allready Booked!');
@@ -188,13 +207,16 @@ class HrController extends Controller
              }else{
               // dd("available");
 
-                $totalPayments = $holidayPayment->single * $totalDays * (+$request->input('NoOfUnits'));
+//                $totalPayments = $holidayPayment->single * $totalDays * (+$request->input('NoOfUnits'));
 
 
                 $hrbooking = new hrbooking;
                     $hrbooking-> BookingType = $request->input('BookingType');
-                    $hrbooking-> CheckInDate = $request->input('CheckInDate');
-                    $hrbooking-> CheckOutDate = $request->input('CheckOutDate');
+//                    $hrbooking-> CheckInDate = $request->input('CheckInDate');
+//                    $hrbooking-> CheckOutDate = $request->input('CheckOutDate');
+                $hrbooking-> CheckInDateTime = $request->input('CheckInDateTime');
+                $hrbooking-> CheckOutDateTime = $request->input('CheckOutDateTime');
+
                     $hrbooking-> NoOfAdults = $request->input('NoOfAdults');
                     $hrbooking-> NoOfChildren = $request->input('NoOfChildren');
                     $hrbooking-> NoOfUnits = $request->input('NoOfUnits');
@@ -205,30 +227,30 @@ class HrController extends Controller
                     if($request->input('BookingType') == "Resource Person" || $request->input('BookingType') == "SUSL Staff"){
                         $hrbooking-> Recommendation_from = $hod[0]->id;
                        // $hrbooking-> VCApproval = $request->input('VCApproval');
-                        
+
                       }
                       else{
                         $hrbooking-> Recommendation_from = 13;
                        // $hrbooking-> VCApproval = 0;
-                        
+
                       }
-                      
+
                     $hrbooking-> GuestId = Auth::user()->id;
                     $hrbooking-> GuestName = Auth::user()->name;
                     $hrbooking-> HolodayResortId =  $request->input('HolodayResortId');
                     $hrbooking->save();
 
-                   //data array which pass details to hrmail    
+                   //data array which pass details to hrmail
                     $data = array(
                         'id'      =>  Auth::user()->id,
                         'name'      =>  Auth::user()->name,
-                        'CheckInDate'=>$request->input('CheckInDate'),
-                        'CheckOutDate'=>$request->input('CheckOutDate'),
+                        'CheckInDateTime'=>$request->input('CheckInDateTime'),
+                        'CheckOutDateTime'=>$request->input('CheckOutDateTime'),
                         'NoOfUnits'=>$request->input('NoOfUnits'),
                         'Description'=>$request->input('Description')
                     );
 
-                   
+
                     $email = DB::select('select email from users where id = 12');
                     //send mail to hr coordinator
                     Mail::to($email)->send(new hremail($data));
@@ -236,27 +258,27 @@ class HrController extends Controller
                      //$Recommendation_From = $request->input('Recommendation_from');
                     //$CheckInDate = hrbooking::where('CheckInDate', '=', $request->input('CheckInDate'))->first();
 
-                    
-                    
+
+
                     return back()->with('success', 'Request Sent Successfuly!');
              }
         }
             return redirect('/')->with('danger','Sorry Allready Booked!');
-        
+
     }
 
 
-    
+
     // function send(Request $request)
     // {
     //  $this->validate($request, [
-      
+
     //  ]);
 
     //  $data = array(
     //     'id'      =>  Auth::user()->id,
     //     'name'      =>  Auth::user()->name,
-     
+
     // );
 
     //         Mail::to('ashansawijeratne@gmail.com')->send(new SendMail($data));

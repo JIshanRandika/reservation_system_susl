@@ -17,9 +17,9 @@
         <h1>Holiday Resort</h1>
 </br>
    <p style="margin-left: 10px;">
-   Holiday Resort is the main circuit bungalows of the Sabaragamuwa University of Sri Lanka. The university provides accommodation 
-   facility to the guest of the university by using these holiday resort bungalows. Mainly there are seven (7) circuit bungalows 
-   named as C1-2, C1-3, C1-8 and C2-1. Each bungalow consist with 3 rooms. One master bedroom with attached bathroom 
+   Holiday Resort is the main circuit bungalows of the Sabaragamuwa University of Sri Lanka. The university provides accommodation
+   facility to the guest of the university by using these holiday resort bungalows. Mainly there are seven (7) circuit bungalows
+   named as C1-2, C1-3, C1-8 and C2-1. Each bungalow consist with 3 rooms. One master bedroom with attached bathroom
    (Accommodate to 2 adults and one child) and 2 bedrooms with shared bathroom and one single room consist with two single beds.
    </p>
     <p style="margin-left: 10px;">Payments as follows</p>
@@ -28,42 +28,42 @@
   <thead class="table-primary">
          <tr>
             <td>Customer Type</td>
-        
+
             <td>Master Room</td>
             <td>Single Room</td>
          </tr>
-         
-         
-        
+
+
+
 </thead>
 <tbody>
         <tr>
         <td>Sabaragamuwa University Staff</td>
-       
+
         <td>2400.00 </td>
         <td>800.00   </td>
          </tr>
-        
+
     <tr>
     <td>Other University Staff </td>
-       
+
             <td>3400.00</td>
             <td>1100.00</td>
          </tr>
          <tr>
          <td>Resource Persons</td>
-       
+
             <td>2000.00</td>
             <td>400.00</td>
          </tr>
 
           <tr>
     <td>Local Visitors</td>
-       
+
             <td>10000.00</td>
             <td>2000.00</td>
          </tr>
-         
+
  </tbody>
       </table>
 
@@ -75,26 +75,26 @@
             <div class="card-body">
             <div class="mb-3">
 
-                    
+
                         {!! Form::model($sessionData, array('route' => array('hr_submit'), 'method' => 'POST', 'id' =>'booking_form')) !!}
 
                           <div class="form-group">
                         {{Form::label('BookingType', 'Booking for ') }}
                         {{Form::select('BookingType', ['Resource Person' => 'Resource Person', 'SUSL Staff' => 'SUSL Staff','Local Visitor' => 'Local Visitor', 'Other University Staff' => 'Other University Staff'], null, ['class'=>'form-control','v-model' => 'booking_type'])}}
-                            
+
                         </div>
 
                          <div class="form-group ">
                             {!! Form::label('Room Type')!!}
                             {!! Form::select('HolodayResortId', $hrfill, null, ['class'=>'form-control', 'v-model' => 'room_type']) !!}
-                    
+
                         </div>
 
                         <div class="form-group">
                         {{Form::label('NoOfUnits', 'Number Of Units') }}
-                        {{Form::text('NoOfUnits', '',['class'=>'form-control','placeholder'=>'Number Of Units', 'v-model' => 'no_of_units', 'v-on:change'=>'checkUnitsCount'])}} 
+                        {{Form::text('NoOfUnits', '',['class'=>'form-control','placeholder'=>'Number Of Units', 'v-model' => 'no_of_units', 'v-on:change'=>'checkUnitsCount'])}}
                         </div>
-                      
+
                         <div class="form-group">
                         {{Form::label('NoOfAdults', 'Number Of Adults') }}
                         {{Form::text('NoOfAdults', '',['class'=>'form-control','placeholder'=>'Number Of Adults', 'v-model' => 'no_of_adults'])}}
@@ -105,19 +105,26 @@
                         </div>
 
 
-                       <div class="form-group">
-                        {{Form::label('CheckInDate', 'Check In Date') }}
-                        {{ Form::date('CheckInDate', !empty($sessionData) ? Input::old('CheckInDate') : new \DateTime() , ['class' => 'form-control']) }}
+{{--                       <div class="form-group">--}}
+{{--                        {{Form::label('CheckInDate', 'Check In Date') }}--}}
+{{--                        {{ Form::date('CheckInDate', !empty($sessionData) ? Input::old('CheckInDate') : new \DateTime() , ['class' => 'form-control']) }}--}}
 
-                        </div>
-                        <div class="form-group">
-                        {{Form::label('CheckOutDate', 'Check Out Date') }}
-                        {{ Form::date('CheckOutDate', !empty($sessionData) ? Input::old('CheckOutDate') : new \DateTime(), ['class' => 'form-control']) }}
-                        </div>
+{{--                        </div>--}}
+{{--                        <div class="form-group">--}}
+{{--                        {{Form::label('CheckOutDate', 'Check Out Date') }}--}}
+{{--                        {{ Form::date('CheckOutDate', !empty($sessionData) ? Input::old('CheckOutDate') : new \DateTime(), ['class' => 'form-control']) }}--}}
+{{--                        </div>--}}
+                <div class="form-group">
+                    {{Form::label('CheckInDateTime', 'Check in Date Time') }}
+                    {{ Form::datetimeLocal('CheckInDateTime', !empty($sessionData) ? Input::old('CheckInDateTime') :null, ['class' => 'form-control']) }}
+                </div>
+                <div class="form-group">
+                    {{Form::label('CheckOutDateTime', 'Check out Date Time') }}
+                    {{ Form::datetimeLocal('CheckOutDateTime', !empty($sessionData) ? Input::old('CheckInDateTime') : null, ['class' => 'form-control']) }}
+                </div>
 
 
-                      
-                        
+
                         <div class="form-group">
                         {{Form::label('Description', 'Description') }}
                         {{Form::textarea('Description', '',['class'=>'form-control','placeholder'=>'Description'])}}
@@ -131,7 +138,7 @@
                         <!-- <div class="form-group" v-if="booking_type === `Resource Person` || booking_type === `SUSL Staff`">
                         {{Form::label('VCApproval', 'Request VC Approval') }}
                         {{Form::select('VCApproval', [1 => 'Yes', 0 => 'No'], null, ['placeholder' => 'Please select ...','class'=>'form-control'])}}
-                        
+
                         </div> -->
 
                         </br>
@@ -155,16 +162,16 @@
                     room_type: {{  !empty($sessionData) ? $sessionData->HolodayResortId : 'null' }},
                     no_of_units:{{ !empty($sessionData) ? $sessionData->NoOfUnits : 0 }},
                     no_of_adults: {{ !empty($sessionData) ? $sessionData->NoOfAdults : 0 }},
-                    no_of_children:{{ !empty($sessionData) ? $sessionData->NoOfChildren : 0 }}   
- 
-                               
+                    no_of_children:{{ !empty($sessionData) ? $sessionData->NoOfChildren : 0 }}
+
+
                 }
             },
 
             methods:{
 
                 checkUnitsCount(){
-            
+
                     if(this.room_type == 1 &&  this.no_of_units > 7){
                         this.no_of_units = 0;
                         alert('Sorry, You can not book more than 7 units.')
@@ -173,7 +180,7 @@
                         this.no_of_units = 0;
                         alert('Sorry, You can not book more than 28 units.')
                     }
-                   
+
                 },
 
                 formSubmit(){
@@ -191,13 +198,13 @@
                         }
                     }
 
-                    
+
                 }
             }
         });
 
-    </script>    
-      
+    </script>
+
 @endsection
 
 <!-- @section('sidebar')

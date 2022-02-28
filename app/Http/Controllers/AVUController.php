@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Input;
 class AVUController extends Controller
 {
     public function getavu(){
-      
+
         $sessionData = [];
 
         // Check the availability session exist or not
@@ -30,7 +30,7 @@ class AVUController extends Controller
                 $sessionData=NULL;
             }
         }
-        
+
         $avu = audiovisualunit::all();
 
         $avudetail = DB::select('select * from audiovisualunits');
@@ -49,7 +49,7 @@ class AVUController extends Controller
     }
 
 
-  
+
 
 
 //     public function dropDownShow()
@@ -97,7 +97,7 @@ class AVUController extends Controller
             ]);
             }
         else{
-                
+
                 $this->validate($request,[
                     'EventName'=>'required',
                     'CheckInDate'=>'required|date|after:yesterday',
@@ -114,7 +114,7 @@ class AVUController extends Controller
                 ]);
        }
 
-        
+
         ;
         $avubooking = new avubooking;
         $avubooking-> EventName = $request->input('EventName');
@@ -146,20 +146,20 @@ class AVUController extends Controller
 
         //$CheckInDate = avubooking::where(['CheckInDate' => $request->input('CheckInDate'), 'Status' => 'Conformed'])->get();
        $CheckInDate = avubooking::where('CheckInDate', '=', $request->input('CheckInDate'))->first();
-        
+
         if ($CheckInDate === null) {
-        
-            
+
+
                 $avubooking->save();
                 Mail::to($email)->send(new avuemail($data));
                 return back()->with('success', 'Request Sent Successfuly!');
 
                 //return redirect('/')->with('success','Request Sent Successfuly !');
-            
+
         }else{
             $CheckInDate = avubooking::whereTime('StartTime', '<', $request->input('StartTime'))->whereTime('EndTime', '>', $request->input('StartTime'))->where('CheckInDate', '=', $request->input('CheckInDate'))->where('Status', 'Confirmed')->get();
             $CheckInDate2 = avubooking::whereTime('StartTime', '>', $request->input('StartTime'))->whereTime('StartTime', '<', $request->input('EndTime'))->where('CheckInDate', '=', $request->input('CheckInDate'))->where('Status', 'Confirmed')->get();
-           
+
             if(count($CheckInDate) > 0 || count($CheckInDate2) > 0){
                // dd("already booked");
                 return redirect('/')->with('success','Sorry Allready Booked!');
@@ -170,8 +170,8 @@ class AVUController extends Controller
                 return back()->with('success', 'Request Sent Successfuly!');
             }
         }
-        
+
             return redirect('/')->with('success','Sorry Allready Booked!');
-        
+
     }
 }
