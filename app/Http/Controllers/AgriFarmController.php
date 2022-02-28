@@ -84,12 +84,12 @@ class AgriFarmController extends Controller
 
         $CheckInDate = agrsbooking::whereDate('CheckInDateTime', '<=', $request->input('CheckInDateTime'))
             ->whereDate('CheckOutDateTime', '>=', $request->input('CheckInDateTime'))
-            ->where('Status', 'Request for Booking')
+            ->where('Status', 'Confirmed')
             ->get();
 
         $CheckInDate2 = agrsbooking::whereDate('CheckInDateTime', '>=', $request->input('CheckInDateTime'))
             ->whereDate('CheckInDateTime', '<=', $request->input('CheckOutDateTime'))
-            ->where('Status', 'Request for Booking')
+            ->where('Status', 'Confirmed')
             ->get();
 
 //            $CheckInDate = agrsbooking::whereDate('CheckInDate', '<=', $request->input('CheckInDate'))->whereDate('CheckOutDate', '>=', $request->input('CheckInDate'))->where('Status', 'Confirmed')->get();
@@ -112,23 +112,29 @@ class AgriFarmController extends Controller
                 $totalDays =0;
                 $booking_type = KabanaPaymentType::where('booking_type',$request->BookingType)->first();
 
-//                $startDate = Carbon::createFromFormat('Y-m-d',$request->CheckInDate);
-//                $startDate= $startDate->addDay();
-//                $endDate = Carbon::createFromFormat('Y-m-d',$request->CheckOutDate);
 
 
-//                $dateRange = CarbonPeriod::create($startDate, $endDate);
-//                foreach($dateRange as $date){
-//                    $totalDays++;
-//                    if($date->isMonday()===true || $date->isTuesday()===true || $date->isWednesday()===true ||$date->isThursday()===true){
-//                        // monday - tuesday
-//                        $amountByDate+=$booking_type->weekdays;
-//                    }else{
-//                        //friday sat sun days
-//                        $amountByDate+=$booking_type->weekend;
-//                    }
-//                }
-//                $totalAmount = $amountByDate*$request->NoOfUnits;
+                $getstartdate = date('Y-m-d', strtotime( $request->CheckInDateTime ) );
+                $getenddate = date('Y-m-d', strtotime( $request->CheckOutDateTime ) );
+
+
+                $startDate = Carbon::createFromFormat('Y-m-d',$getstartdate);
+                $startDate= $startDate->addDay();
+                $endDate = Carbon::createFromFormat('Y-m-d',$getenddate);
+
+
+                $dateRange = CarbonPeriod::create($startDate, $endDate);
+                foreach($dateRange as $date){
+                    $totalDays++;
+                    if($date->isMonday()===true || $date->isTuesday()===true || $date->isWednesday()===true ||$date->isThursday()===true){
+                        // monday - tuesday
+                        $amountByDate+=$booking_type->weekdays;
+                    }else{
+                        //friday sat sun days
+                        $amountByDate+=$booking_type->weekend;
+                    }
+                }
+                $totalAmount = $amountByDate*$request->NoOfUnits;
 
 
               $agrsbooking = new agrsbooking;
@@ -140,7 +146,7 @@ class AgriFarmController extends Controller
               $agrsbooking-> NoOfUnits = $request->input('NoOfUnits');
               $agrsbooking-> Description = $request->input('Description');
               $agrsbooking-> Status = 'Request for Booking';
-//              $agrsbooking->payment_total= $totalAmount;
+              $agrsbooking->payment_total= $totalAmount;
 
               if($request->input('BookingType') == "Resource Person" || $request->input('BookingType') == "SUSL Staff"){
                 $agrsbooking-> Recommendation_from = $hod[0]->id;
