@@ -53,19 +53,19 @@
 
 {{--                ================--}}
                 <div class="form-group">
-                    {{Form::label('CheckInDateTime', 'Check in Date Time') }}
-                    {{ Form::datetimeLocal('CheckInDateTime', !empty($sessionData) ? Input::old('CheckInDateTime') :null, ['class' => 'form-control']) }}
+                    {{Form::label('CheckInDate', 'Check in Date Time') }}
+                    {{ Form::datetimeLocal('CheckInDate', !empty($sessionData) ? Input::old('CheckInDate') :null, ['class' => 'form-control']) }}
                 </div>
                 <div class="form-group">
-                    {{Form::label('CheckOutDateTime', 'Check out Date Time') }}
-                    {{ Form::datetimeLocal('CheckOutDateTime', !empty($sessionData) ? Input::old('CheckInDateTime') : null, ['class' => 'form-control']) }}
+                    {{Form::label('CheckOutDate', 'Check out Date Time') }}
+                    {{ Form::datetimeLocal('CheckOutDate', !empty($sessionData) ? Input::old('CheckInDate') : null, ['class' => 'form-control']) }}
                 </div>
 {{--                <div class="form-group" v-if="property_type === `Holiday Resort` || property_type === `NEST` || property_type === `Agri Farm Kabana`|| property_type === `Agri Farm Dining Room` || property_type === `Audio Visual Unit`">--}}
-{{--                    {{Form::label('CheckInDateTime', 'Check In Date Time') }}--}}
+{{--                    {{Form::label('CheckInDate', 'Check In Date Time') }}--}}
 {{--                    {{ Form::datetimeLocal('due_date', null, ['class' => 'form-control']) }}--}}
 
 {{--                    <div class="form-group" v-if="property_type === `Holiday Resort` || property_type === `NEST` || property_type === `Agri Farm Kabana`|| property_type === `Agri Farm Dining Room` || property_type === `Audio Visual Unit`">--}}
-{{--                        {{Form::label('CheckOutDateTime', 'Check Out Date Time') }}--}}
+{{--                        {{Form::label('CheckOutDate', 'Check Out Date Time') }}--}}
 {{--                        {{ Form::datetimeLocal('due_date', null, ['class' => 'form-control']) }}--}}
 
 {{--                        ===================--}}

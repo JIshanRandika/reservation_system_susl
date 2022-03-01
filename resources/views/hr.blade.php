@@ -115,12 +115,12 @@
 {{--                        {{ Form::date('CheckOutDate', !empty($sessionData) ? Input::old('CheckOutDate') : new \DateTime(), ['class' => 'form-control']) }}--}}
 {{--                        </div>--}}
                 <div class="form-group">
-                    {{Form::label('CheckInDateTime', 'Check in Date Time') }}
-                    {{ Form::datetimeLocal('CheckInDateTime', !empty($sessionData) ? Input::old('CheckInDateTime') :null, ['class' => 'form-control']) }}
+                    {{Form::label('CheckInDate', 'Check in Date Time') }}
+                    {{ Form::datetimeLocal('CheckInDate', !empty($sessionData) ? Input::old('CheckInDate') :null, ['class' => 'form-control']) }}
                 </div>
                 <div class="form-group">
-                    {{Form::label('CheckOutDateTime', 'Check out Date Time') }}
-                    {{ Form::datetimeLocal('CheckOutDateTime', !empty($sessionData) ? Input::old('CheckInDateTime') : null, ['class' => 'form-control']) }}
+                    {{Form::label('CheckOutDate', 'Check out Date Time') }}
+                    {{ Form::datetimeLocal('CheckOutDate', !empty($sessionData) ? Input::old('CheckInDate') : null, ['class' => 'form-control']) }}
                 </div>
 
 

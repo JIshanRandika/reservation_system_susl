@@ -21,7 +21,7 @@
         <h4>
             *** Please note that the reservation cannot be canceled once you have paid.
         </h4>
-    
+
 
         </br>
         {{Form::submit('Submit', ['class'=>'btn btn-primary', 'v-on:click'=>'formSubmit'])}}
@@ -41,7 +41,7 @@
         <td>Check Out Date</td>
         <!-- <td>Number Of Adults</td>
         <td>Number Of Children</td>-->
-        <td>Number Of Units</td> 
+        <td>Number Of Units</td>
         {{-- <td>Guest Tye</td> --}}
         <!-- <td>Description</td>
         <td>Request VC Approval</td> -->
@@ -49,11 +49,11 @@
         <td>Status</td>
         <td></td>
 
-        
-        
-        
-        
-         
+
+
+
+
+
     </tr>
     @foreach ($nestbookings as $nestbooking)
     <tr>
@@ -65,7 +65,7 @@
         <td>{{ $nestbooking->CheckOutDate }}</td>
          {{-- <td>{{ $nestbooking->NoOfAdults }}</td>
         <td>{{ $nestbooking->NoOfChildren  }}</td>--}}
-        <td>{{ $nestbooking->NoOfUnits }}</td>  
+        <td>{{ $nestbooking->NoOfUnits }}</td>
         {{-- <td>{{ $nestbooking->BookingType }}</td> --}}
          {{-- <td>{{ $nestbooking->Description }}</td> --}}
         {{-- @if($nestbooking->VCApproval == 0)
@@ -73,22 +73,22 @@
         @else
         <td>Requested</a></td>
         @endif --}}
-        
+
         <td>{{ number_format($nestbooking->payment_amount,2) }}</td>
         <td>{{ $nestbooking->Status }}</td>
         <td >
-           
+
             @if ($nestbooking->Status!='Cancelled' && $nestbooking->Status!='Confirmed')
             <a href="{{ url('nestcancel',$nestbooking->BookingId) }}" class="btn btn-danger">Cancel</a>
             @endif
         </br> </br>
             @if($nestbooking->Status=='Payment Requested' && $nestbooking->payment_amount>0)<a class="btn btn-primary" href="https://www.sab.ac.lk/codl/payment/?event=reservation&category=Nest&payname={{$nestbooking->GuestName}}&payid={{auth()->user()->id}}&payamount={{$nestbooking->payment_amount}}&payother={{$nestbooking->BookingId}}&payemail={{auth()->user()->email}}">Pay Now</a>
             @endif
-       
-        </td>
-        
 
-       
+        </td>
+
+
+
     </tr>
     @endforeach
     </table>

@@ -63,8 +63,8 @@ class AgriFarmController extends Controller
 
         $this->validate($request,[
             'BookingType' =>'required',
-//            'CheckInDate'=>'required|date|after:yesterday',
-//            'CheckOutDate'=>'required|date|after:CheckInDate',
+            'CheckInDate'=>'required|date|after:yesterday',
+            'CheckOutDate'=>'required|date|after:CheckInDate',
             'NoOfAdults'=>'required|numeric|min:1',
             'NoOfChildren'=>'required|numeric|min:0',
             'NoOfUnits'=>'required|numeric|min:1',
@@ -73,8 +73,8 @@ class AgriFarmController extends Controller
         ],
         [
             'BookingType.required' => 'Please Select Whom are You Booking For',
-//            'CheckInDate.after' => 'Please Enter a Valid Date',
-//            'CheckOutDate.after' => 'Please Enter a Valid Date',
+            'CheckInDate.after' => 'Please Enter a Valid Date',
+            'CheckOutDate.after' => 'Please Enter a Valid Date',
             'NoOfAdults.required' => 'Please Enter The Number of Adults',
             'NoOfChildren.required' => 'Please Enter The Number of Children',
             'NoOfUnits.required' => 'Please Enter The Number of Units',
@@ -82,13 +82,13 @@ class AgriFarmController extends Controller
         ]);
 
 
-        $CheckInDate = agrsbooking::whereDate('CheckInDateTime', '<=', $request->input('CheckInDateTime'))
-            ->whereDate('CheckOutDateTime', '>=', $request->input('CheckInDateTime'))
+        $CheckInDate = agrsbooking::whereDate('CheckInDate', '<=', $request->input('CheckInDate'))
+            ->whereDate('CheckOutDate', '>=', $request->input('CheckInDate'))
             ->where('Status', 'Confirmed')
             ->get();
 
-        $CheckInDate2 = agrsbooking::whereDate('CheckInDateTime', '>=', $request->input('CheckInDateTime'))
-            ->whereDate('CheckInDateTime', '<=', $request->input('CheckOutDateTime'))
+        $CheckInDate2 = agrsbooking::whereDate('CheckInDate', '>=', $request->input('CheckInDate'))
+            ->whereDate('CheckInDate', '<=', $request->input('CheckOutDate'))
             ->where('Status', 'Confirmed')
             ->get();
 
@@ -114,13 +114,16 @@ class AgriFarmController extends Controller
 
 
 
-                $getstartdate = date('Y-m-d', strtotime( $request->CheckInDateTime ) );
-                $getenddate = date('Y-m-d', strtotime( $request->CheckOutDateTime ) );
+                $getstartdate = date('Y-m-d', strtotime( $request->CheckInDate ) );
+                $getenddate = date('Y-m-d', strtotime( $request->CheckOutDate ) );
+
+//                dd($getstartdate);
 
 
                 $startDate = Carbon::createFromFormat('Y-m-d',$getstartdate);
                 $startDate= $startDate->addDay();
                 $endDate = Carbon::createFromFormat('Y-m-d',$getenddate);
+
 
 
                 $dateRange = CarbonPeriod::create($startDate, $endDate);
@@ -136,11 +139,13 @@ class AgriFarmController extends Controller
                 }
                 $totalAmount = $amountByDate*$request->NoOfUnits;
 
+//                dd($totalAmount);
+
 
               $agrsbooking = new agrsbooking;
               $agrsbooking-> BookingType = $request->input('BookingType');
-              $agrsbooking-> CheckInDateTime = $request->input('CheckInDateTime');
-              $agrsbooking-> CheckOutDateTime = $request->input('CheckOutDateTime');
+              $agrsbooking-> CheckInDate = $request->input('CheckInDate');
+              $agrsbooking-> CheckOutDate = $request->input('CheckOutDate');
               $agrsbooking-> NoOfAdults = $request->input('NoOfAdults');
               $agrsbooking-> NoOfChildren = $request->input('NoOfChildren');
               $agrsbooking-> NoOfUnits = $request->input('NoOfUnits');
@@ -167,8 +172,8 @@ class AgriFarmController extends Controller
               $data = array(
                   'id'      =>  Auth::user()->id,
                   'name'      =>  Auth::user()->name,
-                  'CheckInDateTime'=>$request->input('CheckInDateTime'),
-                  'CheckOutDateTime'=>$request->input('CheckOutDateTime'),
+                  'CheckInDate'=>$request->input('CheckInDate'),
+                  'CheckOutDate'=>$request->input('CheckOutDate'),
                   'NoOfUnits'=>$request->input('NoOfUnits'),
                   'Description'=>$request->input('Description')
               );

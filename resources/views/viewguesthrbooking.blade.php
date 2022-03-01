@@ -49,11 +49,11 @@
         <td>Status</td>
         <td></td>
         {{-- <td>Option</td> --}}
-        
-        
-        
-        
-         
+
+
+
+
+
     </tr>
     @foreach ($hrbookings as $hrbooking)
     <tr>
@@ -76,13 +76,13 @@
 
         <td>{{ number_format($hrbooking->payment_total, 2)}}</td>
         <td>{{ $hrbooking->Status }}</td>
-        <td > 
+        <td >
             @if ($hrbooking->Status!='Cancelled' && $hrbooking->Status!='Confirmed')
             <a href="{{ url('hrcancel',$hrbooking->BookingId) }}" class="btn btn-danger">Cancel</a>
             @endif
         </br> </br>
             @if($hrbooking->Status=='Payment Requested' && $hrbooking->payment_total>0)<a class="btn btn-primary" href="https://www.sab.ac.lk/codl/payment/?event=reservation&category=Holiday Resort&payname={{$hrbooking->GuestName}}&payid={{auth()->user()->id}}&payamount={{$hrbooking->payment_total}}&payother={{$hrbooking->BookingId}}&payemail={{auth()->user()->email}}">Pay Now</a>@endif
-        
+
         </td>
 
         {{-- <td>
@@ -92,11 +92,11 @@
         <a href = 'hrrecommend/{{ $hrbooking->BookingId }}'>Recommend</a> </br>
         <a href = 'hrnotrecommend/{{ $hrbooking->BookingId }}'>Reject</a>
         @else
-        
+
         @endif --}}
-       
+
         </td>
-       
+
     </tr>
     @endforeach
     </table>

@@ -18,16 +18,16 @@ use App\Mail\SendMail;
 class AdminAgriSBookingController extends Controller
 {
     //load agri farm booking details in admin page
-    public function viewadminagribooking(Request $request) { 
-      
+    public function viewadminagribooking(Request $request) {
+
         if($request->input('CheckInDate') != null){
             $agrsbookings = agrsbooking::whereDate('CheckInDate', $request->input('CheckInDate'))->orderBy('BookingId', 'DESC')->paginate(10);
         }else{
             $agrsbookings = agrsbooking::orderBy('BookingId', 'DESC')->paginate(10);
         }
 
-        return view('viewadminagribooking',['agrsbookings'=>$agrsbookings]); 
-       } 
+        return view('viewadminagribooking',['agrsbookings'=>$agrsbookings]);
+       }
 
 
 
@@ -37,10 +37,10 @@ class AdminAgriSBookingController extends Controller
 
             $data = $BookingId;
 
-            
+
             $GuestId = DB::table('agrsbookings')->where('BookingId', [$BookingId])->value('GuestId');
             $email = DB::table('users')->where('id', [$GuestId])->value('email');
-            
+
 
             $Status = 'Confirmed';
             DB::update('update agrsbookings set Status = ? where BookingId = ?',[$Status,$BookingId]);
@@ -68,7 +68,7 @@ class AdminAgriSBookingController extends Controller
                 return back()->with('success', 'Message Sent Successfuly!');
                 }
 
-               
+
 
                 //show selected agri farm details
                 public function showaf($id) {
@@ -86,15 +86,15 @@ class AdminAgriSBookingController extends Controller
                 public function vcapprove(Request $request,$BookingId) {
                     $data = $BookingId;
                     $Status = 'Request Vice Chancellor Approval';
-                    
-    
+
+
                     DB::update('update agrsbookings set Status = ? where BookingId = ?',[$Status,$BookingId]);
                     echo "Record updated successfully.
                     ";
                     echo 'Click Here to go back.';
-    
+
                     $email = DB::select('select email from users where roleNo = 2');
-                
+
                     Mail::to($email)->send(new SendMail($data));
                     return back()->with('success', 'Message Sent Successfuly!');
                     }

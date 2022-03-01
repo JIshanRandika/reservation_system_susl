@@ -23,8 +23,8 @@ class CreateNestbookingsTable extends Migration
 //            $table->time('StartTime', $precision = 0);
 //            $table->time('EndTime', $precision = 0);
 
-            $table->dateTime('CheckInDateTime');
-            $table->dateTime('CheckOutDateTime');
+            $table->dateTime('CheckInDate');
+            $table->dateTime('CheckOutDate');
 
 
 			$table->integer('NoOfAdults');

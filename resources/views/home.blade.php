@@ -54,12 +54,12 @@
 
 {{--                ===============--}}
                 <div class="form-group" v-if="property_type === `Holiday Resort` || property_type === `NEST` || property_type === `Agri Farm Kabana`">
-                    {{Form::label('CheckInDateTime', 'Check In Date Time') }}
-                    {{ Form::datetimeLocal('CheckInDateTime', null, ['class' => 'form-control']) }}
+                    {{Form::label('CheckInDate', 'Check In Date Time') }}
+                    {{ Form::datetimeLocal('CheckInDate', null, ['class' => 'form-control']) }}
                 </div>
                     <div class="form-group" v-if="property_type === `Holiday Resort` || property_type === `NEST` || property_type === `Agri Farm Kabana`">
-                        {{Form::label('CheckOutDateTime', 'Check Out Date Time') }}
-                        {{ Form::datetimeLocal('CheckOutDateTime', null, ['class' => 'form-control']) }}
+                        {{Form::label('CheckOutDate', 'Check Out Date Time') }}
+                        {{ Form::datetimeLocal('CheckOutDate', null, ['class' => 'form-control']) }}
                     </div>
 {{--                Edit--}}
 

@@ -21,7 +21,7 @@ use App\Mail\SendMail;
 class AdminDBookingController extends Controller
 {
       //view agri farm dinning room booking details
-       public function viewadminafdbooking(Request $request) { 
+       public function viewadminafdbooking(Request $request) {
 
 
         if($request->input('CheckInDate') != null){
@@ -38,16 +38,16 @@ class AdminDBookingController extends Controller
             ->orderBy('BookingId', 'DESC')
             ->paginate(10);
         }
-      
-       
 
-    
-       
-        return view('viewadminafdbooking',['agridbookings'=>$agridbookings]); 
-   
-       } 
-     
-       
+
+
+
+
+        return view('viewadminafdbooking',['agridbookings'=>$agridbookings]);
+
+       }
+
+
 //confirm booking
        public function confirm(Request $request,$BookingId) {
 
@@ -83,7 +83,7 @@ class AdminDBookingController extends Controller
             Mail::to($email)->send(new RejectMail($data));
             return back()->with('success', 'Message Sent Successfuly!');
             }
-         
+
 //show selected details
                 public function show($id) {
 
@@ -98,24 +98,24 @@ class AdminDBookingController extends Controller
                          return view('afd_adminview',['users'=>$users]);
                 }
 
-                        
+
 //request vc approval
                     public function vcapprove(Request $request,$BookingId) {
                                 $data = $BookingId;
                                 $Status = 'Request Vice Chancellor Approval';
-                                
-                
+
+
                                 DB::update('update agridbookings set Status = ? where BookingId = ?',[$Status,$BookingId]);
                                 echo "Record updated successfully.
                                 ";
                                 echo 'Click Here to go back.';
-                
+
                                 $email = DB::select('select email from users where roleNo = 2');
-                
+
                                 Mail::to($email)->send(new SendMail($data));
                                 return back()->with('success', 'Message Sent Successfuly!');
                                 }
-                            
-                            
+
+
 
 }

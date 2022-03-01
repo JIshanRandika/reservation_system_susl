@@ -17,7 +17,7 @@ use App\Mail\SendMail;
 class AdminHrBookingController extends Controller
 {
     //view booking details
-    public function viewadminhrbooking(Request $request) { 
+    public function viewadminhrbooking(Request $request) {
 
         if($request->input('CheckInDate') != null){
             $hrbookings =DB::table('hrbookings')
@@ -32,16 +32,16 @@ class AdminHrBookingController extends Controller
             ->join('holidayresorts','holidayresorts.HolodayResortId','=','hrbookings.HolodayResortId')
             ->orderBy('BookingId', 'DESC')
             ->paginate(10);
-          
-        }
-      
-        
-       
-        return view('viewadminhrbooking',['hrbookings'=>$hrbookings]); 
-        
-       } 
 
-      
+        }
+
+
+
+        return view('viewadminhrbooking',['hrbookings'=>$hrbookings]);
+
+       }
+
+
 
        //confirm details
         public function confirm(Request $request,$BookingId) {
@@ -51,7 +51,7 @@ class AdminHrBookingController extends Controller
             //$GuestId = DB::select('select GuestId from avubookings where BookingId = ?', [$data]);
             $GuestId = DB::table('hrbookings')->where('BookingId', [$BookingId])->value('GuestId');
             $email = DB::table('users')->where('id', [$GuestId])->value('email');
-            
+
 
             $Status = 'Confirmed';
             DB::update('update hrbookings set Status = ? where BookingId = ?',[$Status,$BookingId]);
@@ -79,7 +79,7 @@ class AdminHrBookingController extends Controller
                 return back()->with('success', 'Message Sent Successfuly!');
                 }
 
-               
+
         //show selected details
                     public function showhr($id) {
 
@@ -97,15 +97,15 @@ class AdminHrBookingController extends Controller
                         public function vcapprove(Request $request,$BookingId) {
                             $data = $BookingId;
                             $Status = 'Request Vice Chancellor Approval';
-                            
-                          
+
+
                             DB::update('update hrbookings set Status = ? where BookingId = ?',[$Status,$BookingId]);
                             echo "Record updated successfully.
                             ";
                             echo 'Click Here to go back.';
-            
+
                             $email = DB::select('select email from users where roleNo = 2');
-                
+
                             Mail::to($email)->send(new SendMail($data));
                             return back()->with('success', 'Message Sent Successfuly!');
                             }

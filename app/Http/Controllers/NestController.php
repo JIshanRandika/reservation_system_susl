@@ -69,9 +69,9 @@ class NestController extends Controller
 
 //dd( $hod[0]->id,$Department);
         $this->validate($request,[
-//            'CheckInDate'=>'required|date|after:yesterday',
-//            'CheckOutDate'=>'required|date|after:CheckInDate',
-//
+            'CheckInDate'=>'required|date|after:yesterday',
+            'CheckOutDate'=>'required|date|after:CheckInDate',
+
 //            'StartTime'=>'required',
 //            'EndTime'=>'required',
 
@@ -85,8 +85,8 @@ class NestController extends Controller
         ],
         [
             'BookingType.required' => 'Please Select Whom are You Booking For',
-//            'CheckInDate.after' => 'Please Enter a Valid Date',
-//            'CheckOutDate.after' => 'Please Enter a Valid Date',
+            'CheckInDate.after' => 'Please Enter a Valid Date',
+            'CheckOutDate.after' => 'Please Enter a Valid Date',
             'NoOfAdults.required' => 'Please Enter The Number of Adults',
             'NoOfChildren.required' => 'Please Enter The Number of Children',
             'NoOfUnits.required' => 'Please Enter The Number of Units',
@@ -98,19 +98,19 @@ class NestController extends Controller
 //        $startDate = Carbon::createFromFormat('Y-m-d',$request->CheckInDate);
 //        $endDate = Carbon::createFromFormat('Y-m-d',$request->CheckOutDate);
 
-//        $startDate = Carbon::parse($request->CheckInDateTime)->format('Y-m-d');
-//        $endDate = Carbon::parse($request->CheckOutDateTime)->format('Y-m-d');
+//        $startDate = Carbon::parse($request->CheckInDate)->format('Y-m-d');
+//        $endDate = Carbon::parse($request->CheckOutDate)->format('Y-m-d');
 
-//        $startDate = Carbon::createFromFormat('Y-m-d',$request->CheckInDateTime->toDateString());
-//        $endDate = Carbon::createFromFormat('Y-m-d',$request->CheckOutDateTime->toDateString());
+//        $startDate = Carbon::createFromFormat('Y-m-d',$request->CheckInDate->toDateString());
+//        $endDate = Carbon::createFromFormat('Y-m-d',$request->CheckOutDate->toDateString());
 
-//        $startDate = Carbon::parse('Y-m-d HH:mm:ss',$request->CheckInDateTime);
-//        $endDate = Carbon::parse('Y-m-d HH:mm:ss',$request->CheckOutDateTime);
+//        $startDate = Carbon::parse('Y-m-d HH:mm:ss',$request->CheckInDate);
+//        $endDate = Carbon::parse('Y-m-d HH:mm:ss',$request->CheckOutDate);
 
 
 //        $dateRange = CarbonPeriod::create($startDate, $endDate);
 
-//        $totalDayObj = ($request->CheckOutDateTime)->diffForHumans($request->CheckInDateTime);
+//        $totalDayObj = ($request->CheckOutDate)->diffForHumans($request->CheckInDate);
 
 //        $totalDayObj =$startDate->diff($endDate);
 //        $startTime = Carbon::parse('2020-02-11 04:04:26');
@@ -120,11 +120,11 @@ class NestController extends Controller
 
 //        $mystartdate =
 
-//        $startDate = \DateTime::createFromFormat('Y-m-d',$request->CheckInDateTime);
-//        $endDate = \DateTime::createFromFormat('Y-m-d',$request->CheckOutDateTime);
+//        $startDate = \DateTime::createFromFormat('Y-m-d',$request->CheckInDate);
+//        $endDate = \DateTime::createFromFormat('Y-m-d',$request->CheckOutDate);
 //
-        $getstartdate = date('Y-m-d', strtotime( $request->CheckInDateTime ) );
-        $getenddate = date('Y-m-d', strtotime( $request->CheckOutDateTime ) );
+        $getstartdate = date('Y-m-d', strtotime( $request->CheckInDate ) );
+        $getenddate = date('Y-m-d', strtotime( $request->CheckOutDate ) );
 
         $startDate = Carbon::createFromFormat('Y-m-d',$getstartdate);
         $endDate = Carbon::createFromFormat('Y-m-d',$getenddate);
@@ -142,13 +142,13 @@ class NestController extends Controller
             //Master bed room
 
 //            $CheckInDate = nestbooking::whereDate('CheckInDate', '<=', $request->input('CheckInDate'))->whereDate('CheckOutDate', '>=', $request->input('CheckInDate'))->where('Status', 'Confirmed')->get();
-            $CheckInDate = nestbooking::whereDate('CheckInDateTime', '<=', $request->input('CheckInDateTime'))
-                ->whereDate('CheckOutDateTime', '>=', $request->input('CheckInDateTime'))
+            $CheckInDate = nestbooking::whereDate('CheckInDate', '<=', $request->input('CheckInDate'))
+                ->whereDate('CheckOutDate', '>=', $request->input('CheckInDate'))
                 ->where('Status', 'Confirmed')
                 ->get();
 
-            $CheckInDate2 = nestbooking::whereDate('CheckInDateTime', '>=', $request->input('CheckInDateTime'))
-                ->whereDate('CheckInDateTime', '<=', $request->input('CheckOutDateTime'))
+            $CheckInDate2 = nestbooking::whereDate('CheckInDate', '>=', $request->input('CheckInDate'))
+                ->whereDate('CheckInDate', '<=', $request->input('CheckOutDate'))
                 ->where('Status', 'Confirmed')
                 ->get();
 
@@ -189,8 +189,8 @@ class NestController extends Controller
 //               $nestbooking-> StartTime = $request->input('StartTime');
 //               $nestbooking-> EndTime = $request->input('EndTime');
 
-               $nestbooking-> CheckInDateTime = $request->input('CheckInDateTime');
-               $nestbooking-> CheckOutDateTime = $request->input('CheckOutDateTime');
+               $nestbooking-> CheckInDate = $request->input('CheckInDate');
+               $nestbooking-> CheckOutDate = $request->input('CheckOutDate');
 
 
               $nestbooking-> NoOfAdults = $request->input('NoOfAdults');
@@ -218,8 +218,8 @@ class NestController extends Controller
 //                  'StartTime'=>$request->input('StartTime'),
 //                  'EndTime'=>$request->input('EndTime'),
 
-                  'CheckInDateTime'=>$request->input('CheckInDateTime'),
-                  'CheckOutDateTime'=>$request->input('CheckOutDateTime'),
+                  'CheckInDate'=>$request->input('CheckInDate'),
+                  'CheckOutDate'=>$request->input('CheckOutDate'),
 
                   'NoOfAdults'=>$request->input('NoOfAdults'),
                   'NoOfChildren'=>$request->input('NoOfChildren'),
@@ -245,13 +245,13 @@ class NestController extends Controller
         if($request->input('NestId') == 2){
             //Master bed room
 
-            $CheckInDate = nestbooking::whereDate('CheckInDateTime', '<=', $request->input('CheckInDateTime'))
-                ->whereDate('CheckOutDateTime', '>=', $request->input('CheckInDateTime'))
+            $CheckInDate = nestbooking::whereDate('CheckInDate', '<=', $request->input('CheckInDate'))
+                ->whereDate('CheckOutDate', '>=', $request->input('CheckInDate'))
                 ->where('Status', 'Request for Booking')
                 ->get();
 
-            $CheckInDate2 = nestbooking::whereDate('CheckInDateTime', '>=', $request->input('CheckInDateTime'))
-                ->whereDate('CheckInDateTime', '<=', $request->input('CheckOutDateTime'))
+            $CheckInDate2 = nestbooking::whereDate('CheckInDate', '>=', $request->input('CheckInDate'))
+                ->whereDate('CheckInDate', '<=', $request->input('CheckOutDate'))
                 ->where('Status', 'Request for Booking')
                 ->get();
 
@@ -278,8 +278,8 @@ class NestController extends Controller
 //               $nestbooking-> StartTime = $request->input('StartTime');
 //               $nestbooking-> EndTime = $request->input('EndTime');
 
-               $nestbooking-> CheckInDateTime = $request->input('CheckInDateTime');
-               $nestbooking-> CheckOutDateTime = $request->input('CheckOutDateTime');
+               $nestbooking-> CheckInDate = $request->input('CheckInDate');
+               $nestbooking-> CheckOutDate = $request->input('CheckOutDate');
 
 
                $nestbooking-> NoOfAdults = $request->input('NoOfAdults');
@@ -305,8 +305,8 @@ class NestController extends Controller
 //                  'StartTime'=>$request->input('StartTime'),
 //                  'EndTime'=>$request->input('EndTime'),
 
-                  'CheckInDateTime'=>$request->input('CheckInDateTime'),
-                  'CheckOutDateTime'=>$request->input('CheckOutDateTime'),
+                  'CheckInDate'=>$request->input('CheckInDate'),
+                  'CheckOutDate'=>$request->input('CheckOutDate'),
 
                   'NoOfAdults'=>$request->input('NoOfAdults'),
                   'NoOfChildren'=>$request->input('NoOfChildren'),

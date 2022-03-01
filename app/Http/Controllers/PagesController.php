@@ -51,19 +51,19 @@ class PagesController extends Controller
 
 
             $this->validate($request,[
-//                'CheckInDate'=>'required|date|after:yesterday',
-//                'CheckOutDate'=>'required|date|after:CheckInDate',
-//                'NoOfAdults'=>'required|numeric|min:1',
-//                'NoOfChildren'=>'required|numeric|min:0',
-//                'NoOfUnits'=>'required|numeric|min:1',
-//                'HolodayResortId'=>'required',
+                'CheckInDate'=>'required|date|after:yesterday',
+                'CheckOutDate'=>'required|date|after:CheckInDate',
+                'NoOfAdults'=>'required|numeric|min:1',
+                'NoOfChildren'=>'required|numeric|min:0',
+                'NoOfUnits'=>'required|numeric|min:1',
+                'HolodayResortId'=>'required',
             ],
             [
-//                'CheckInDate.after' => 'Please Enter a Valid Date',
-//                'CheckOutDate.after' => 'Please Enter a Valid Date',
-//                'NoOfAdults.required' => 'Please Enter The Number of Adults',
-//                'NoOfChildren.required' => 'Please Enter The Number of Children',
-//                'NoOfUnits.required' => 'Please Enter The Number of Units',
+                'CheckInDate.after' => 'Please Enter a Valid Date',
+                'CheckOutDate.after' => 'Please Enter a Valid Date',
+                'NoOfAdults.required' => 'Please Enter The Number of Adults',
+                'NoOfChildren.required' => 'Please Enter The Number of Children',
+                'NoOfUnits.required' => 'Please Enter The Number of Units',
             ]);
 
 
@@ -72,13 +72,13 @@ class PagesController extends Controller
 
 //                $CheckInDate = hrbooking::whereDate('CheckInDate', '<=', $request->input('CheckInDate'))->whereDate('CheckOutDate', '>=', $request->input('CheckInDate'))->where('HolodayResortId', '1')->where('Status', 'Confirmed')->get();
 //                $CheckInDate2 = hrbooking::whereDate('CheckInDate', '>=', $request->input('CheckInDate'))->whereDate('CheckInDate', '<=', $request->input('CheckOutDate'))->where('HolodayResortId', '1')->where('Status', 'Confirmed')->get();
-                $CheckInDate = hrbooking::whereDate('CheckInDateTime', '<=', $request->input('CheckInDateTime'))
-                    ->whereDate('CheckOutDateTime', '>=', $request->input('CheckInDateTime'))
+                $CheckInDate = hrbooking::whereDate('CheckInDate', '<=', $request->input('CheckInDate'))
+                    ->whereDate('CheckOutDate', '>=', $request->input('CheckInDate'))
                     ->where('Status', 'Request for Booking')
                     ->get();
 
-                $CheckInDate2 = hrbooking::whereDate('CheckInDateTime', '>=', $request->input('CheckInDateTime'))
-                    ->whereDate('CheckInDateTime', '<=', $request->input('CheckOutDateTime'))
+                $CheckInDate2 = hrbooking::whereDate('CheckInDate', '>=', $request->input('CheckInDate'))
+                    ->whereDate('CheckInDate', '<=', $request->input('CheckOutDate'))
                     ->where('Status', 'Request for Booking')
                     ->get();
 
@@ -106,13 +106,13 @@ class PagesController extends Controller
 
 //                $CheckInDate = hrbooking::whereDate('CheckInDate', '<=', $request->input('CheckInDate'))->whereDate('CheckOutDate', '>=', $request->input('CheckInDate'))->where('HolodayResortId', '2')->where('Status', 'Confirmed')->get();
 //                $CheckInDate2 = hrbooking::whereDate('CheckInDate', '>=', $request->input('CheckInDate'))->whereDate('CheckInDate', '<=', $request->input('CheckOutDate'))->where('HolodayResortId', '2')->where('Status', 'Confirmed')->get();
-                $CheckInDate = hrbooking::whereDate('CheckInDateTime', '<=', $request->input('CheckInDateTime'))
-                    ->whereDate('CheckOutDateTime', '>=', $request->input('CheckInDateTime'))
+                $CheckInDate = hrbooking::whereDate('CheckInDate', '<=', $request->input('CheckInDate'))
+                    ->whereDate('CheckOutDate', '>=', $request->input('CheckInDate'))
                     ->where('Status', 'Request for Booking')
                     ->get();
 
-                $CheckInDate2 = hrbooking::whereDate('CheckInDateTime', '>=', $request->input('CheckInDateTime'))
-                    ->whereDate('CheckInDateTime', '<=', $request->input('CheckOutDateTime'))
+                $CheckInDate2 = hrbooking::whereDate('CheckInDate', '>=', $request->input('CheckInDate'))
+                    ->whereDate('CheckInDate', '<=', $request->input('CheckOutDate'))
                     ->where('Status', 'Request for Booking')
                     ->get();
 
@@ -140,16 +140,16 @@ class PagesController extends Controller
     if($request->input('property') == 'NEST'){
 
         $this->validate($request,[
-//            'CheckInDate'=>'required|date|after:yesterday',
-//            'CheckOutDate'=>'required|date|after:CheckInDate',
+            'CheckInDate'=>'required|date|after:yesterday',
+            'CheckOutDate'=>'required|date|after:CheckInDate',
             'NoOfAdults'=>'required|numeric|min:1',
             'NoOfChildren'=>'required|numeric|min:0',
             'NoOfUnits'=>'required|numeric|min:1',
             'NestId'=>'required',
         ],
         [
-//            'CheckInDate.after' => 'Please Enter a Valid Date',
-//            'CheckOutDate.after' => 'Please Enter a Valid Date',
+            'CheckInDate.after' => 'Please Enter a Valid Date',
+            'CheckOutDate.after' => 'Please Enter a Valid Date',
             'NoOfAdults.required' => 'Please Enter The Number of Adults',
             'NoOfChildren.required' => 'Please Enter The Number of Children',
             'NoOfUnits.required' => 'Please Enter The Number of Units',
@@ -161,13 +161,13 @@ class PagesController extends Controller
 
 //            $CheckInDate = nestbooking::whereDate('CheckInDate', '<=', $request->input('CheckInDate'))->whereDate('CheckOutDate', '>=', $request->input('CheckInDate'))->where('Status', 'Confirmed')->get();
 //            $CheckInDate2 = nestbooking::whereDate('CheckInDate', '>=', $request->input('CheckInDate'))->whereDate('CheckInDate', '<=', $request->input('CheckOutDate'))->where('Status', 'Confirmed')->get();
-            $CheckInDate = nestbooking::whereDate('CheckInDateTime', '<=', $request->input('CheckInDateTime'))
-                ->whereDate('CheckOutDateTime', '>=', $request->input('CheckInDateTime'))
+            $CheckInDate = nestbooking::whereDate('CheckInDate', '<=', $request->input('CheckInDate'))
+                ->whereDate('CheckOutDate', '>=', $request->input('CheckInDate'))
                 ->where('Status', 'Request for Booking')
                 ->get();
 
-            $CheckInDate2 = nestbooking::whereDate('CheckInDateTime', '>=', $request->input('CheckInDateTime'))
-                ->whereDate('CheckInDateTime', '<=', $request->input('CheckOutDateTime'))
+            $CheckInDate2 = nestbooking::whereDate('CheckInDate', '>=', $request->input('CheckInDate'))
+                ->whereDate('CheckInDate', '<=', $request->input('CheckOutDate'))
                 ->where('Status', 'Request for Booking')
                 ->get();
 
@@ -193,13 +193,13 @@ class PagesController extends Controller
 
 //            $CheckInDate = nestbooking::whereDate('CheckInDate', '<=', $request->input('CheckInDate'))->whereDate('CheckOutDate', '>=', $request->input('CheckInDate'))->where('Status', 'Confirmed')->get();
 //            $CheckInDate2 = nestbooking::whereDate('CheckInDate', '>=', $request->input('CheckInDate'))->whereDate('CheckInDate', '<=', $request->input('CheckOutDate'))->where('Status', 'Confirmed')->get();
-            $CheckInDate = nestbooking::whereDate('CheckInDateTime', '<=', $request->input('CheckInDateTime'))
-                ->whereDate('CheckOutDateTime', '>=', $request->input('CheckInDateTime'))
+            $CheckInDate = nestbooking::whereDate('CheckInDate', '<=', $request->input('CheckInDate'))
+                ->whereDate('CheckOutDate', '>=', $request->input('CheckInDate'))
                 ->where('Status', 'Request for Booking')
                 ->get();
 
-            $CheckInDate2 = nestbooking::whereDate('CheckInDateTime', '>=', $request->input('CheckInDateTime'))
-                ->whereDate('CheckInDateTime', '<=', $request->input('CheckOutDateTime'))
+            $CheckInDate2 = nestbooking::whereDate('CheckInDate', '>=', $request->input('CheckInDate'))
+                ->whereDate('CheckInDate', '<=', $request->input('CheckOutDate'))
                 ->where('Status', 'Request for Booking')
                 ->get();
 
@@ -227,15 +227,15 @@ if($request->input('property') == 'Agri Farm Kabana'){
 
 
     $this->validate($request,[
-//        'CheckInDate'=>'required|date|after:yesterday',
-//        'CheckOutDate'=>'required|date|after:CheckInDate',
+        'CheckInDate'=>'required|date|after:yesterday',
+        'CheckOutDate'=>'required|date|after:CheckInDate',
         'NoOfAdults'=>'required|numeric|min:1',
         'NoOfChildren'=>'required|numeric|min:0',
         'NoOfUnits'=>'required|numeric|min:1',
     ],
     [
-//        'CheckInDate.after' => 'Please Enter a Valid Date',
-//        'CheckOutDate.after' => 'Please Enter a Valid Date',
+        'CheckInDate.after' => 'Please Enter a Valid Date',
+        'CheckOutDate.after' => 'Please Enter a Valid Date',
         'NoOfAdults.required' => 'Please Enter The Number of Adults',
         'NoOfChildren.required' => 'Please Enter The Number of Children',
         'NoOfUnits.required' => 'Please Enter The Number of Units',
@@ -247,13 +247,13 @@ if($request->input('property') == 'Agri Farm Kabana'){
 
 //        $CheckInDate = agrsbooking::whereDate('CheckInDate', '<=', $request->input('CheckInDate'))->whereDate('CheckOutDate', '>=', $request->input('CheckInDate'))->where('Status', 'Confirmed')->get();
 //        $CheckInDate2 = agrsbooking::whereDate('CheckInDate', '>=', $request->input('CheckInDate'))->whereDate('CheckInDate', '<=', $request->input('CheckOutDate'))->where('Status', 'Confirmed')->get();
-    $CheckInDate = agrsbooking::whereDate('CheckInDateTime', '<=', $request->input('CheckInDateTime'))
-        ->whereDate('CheckOutDateTime', '>=', $request->input('CheckInDateTime'))
+    $CheckInDate = agrsbooking::whereDate('CheckInDate', '<=', $request->input('CheckInDate'))
+        ->whereDate('CheckOutDate', '>=', $request->input('CheckInDate'))
         ->where('Status', 'Request for Booking')
         ->get();
 
-    $CheckInDate2 = agrsbooking::whereDate('CheckInDateTime', '>=', $request->input('CheckInDateTime'))
-        ->whereDate('CheckInDateTime', '<=', $request->input('CheckOutDateTime'))
+    $CheckInDate2 = agrsbooking::whereDate('CheckInDate', '>=', $request->input('CheckInDate'))
+        ->whereDate('CheckInDate', '<=', $request->input('CheckOutDate'))
         ->where('Status', 'Request for Booking')
         ->get();
 
