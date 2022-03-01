@@ -15,7 +15,7 @@
 
     <div class="form-group">
     {{Form::label('CheckInDate', 'Check In Date') }}
-    <input type="date" class="form-control" name="CheckInDate" value="{{request()->query('CheckInDate') != null ? request()->query('CheckInDate') : date('yyyy/mm/dd')}}">
+        <input type="date" class="form-control" name="CheckInDate" value="{{ date('Y-m-d', strtotime( request()->query('CheckInDate') ) ) != null ?  date('Y-m-d', strtotime( request()->query('CheckInDate') ) ) : date('yyyy/mm/dd')}}">
 
     </div>
 
@@ -41,11 +41,11 @@
         <!-- <td>Request VC Approval</td> -->
         <td>Status</td>
         <td>Option</td>
-        
-        
-        
-        
-         
+
+
+
+
+
     </tr>
     @foreach ($agridbookings as $agridbooking)
     <tr>
@@ -63,13 +63,13 @@
         <td>Requested</td>
         @endif -->
         <td>{{ $agridbooking->Status }}</td>
-       
+
         <td>
         <a href = 'showadmin/{{ $agridbooking->BookingId }}'>View</a></br>
         <!-- <a href = 'afdadminconfirm/{{ $agridbooking->BookingId }}'>Confirm</a></br>
         <a href = 'afdadminnotconfirm/{{ $agridbooking->BookingId }}'>Reject</a> -->
         </td>
-       
+
     </tr>
     @endforeach
     </table>

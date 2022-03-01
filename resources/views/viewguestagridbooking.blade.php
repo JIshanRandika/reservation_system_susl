@@ -15,7 +15,8 @@
 
     <div class="form-group">
     {{Form::label('CheckInDate', 'Check In Date') }}
-    <input type="date" class="form-control" name="CheckInDate" value="{{request()->query('CheckInDate') != null ? request()->query('CheckInDate') : date('yyyy/mm/dd')}}">
+{{--    <input type="date" class="form-control" name="CheckInDate" value="{{request()->query('CheckInDate') != null ? request()->query('CheckInDate') : date('yyyy/mm/dd')}}">--}}
+        <input type="date" class="form-control" name="CheckInDate" value="{{ date('Y-m-d', strtotime( request()->query('CheckInDate') ) ) != null ?  date('Y-m-d', strtotime( request()->query('CheckInDate') ) ) : date('yyyy/mm/dd')}}">
 
     </div>
     <h4>
@@ -44,11 +45,11 @@
         <td>Status</td>
         <td></td>
         {{-- <td>Confirm</td> --}}
-        
-        
-        
-        
-         
+
+
+
+
+
     </tr>
     @foreach ($agridbookings as $agridbooking)
     <tr>
@@ -65,23 +66,23 @@
         <td >
             @if ($agridbooking->Status!='Cancelled' && $agridbooking->Status!='Confirmed')
             <a href="{{ url('afdcancel',$agridbooking->BookingId) }}" class="btn btn-danger">Cancel</a>
-        </br> </br> 
+        </br> </br>
             @endif
             @if($agridbooking->Status=='Payment Requested' && $agridbooking->payment_amount>0)<a href="https://www.sab.ac.lk/codl/payment/?event=reservation&category=Agri Farm Dining Room&payname={{$agridbooking->GuestName}}&payid={{auth()->user()->id}}&payamount={{$agridbooking->payment_amount}}&payother={{$agridbooking->BookingId}}&payemail={{auth()->user()->email}}" class="btn btn-primary">Pay Now</a>@endif
-        
+
         </td>
         {{-- <td>
-        
+
         <a href = 'showafddean/{{ $agridbooking->BookingId }}'>View</a></br>
         @if($agridbooking->Status == 'Send to Recommendation')
         <a href = 'afdrecommend/{{ $agridbooking->BookingId }}'>Recommend</a> </br>
         <a href = 'afdnotrecommend/{{ $agridbooking->BookingId }}'>Reject</a>
         @else
-        
+
         @endif
-       
+
         </td> --}}
-       
+
     </tr>
     @endforeach
     </table>

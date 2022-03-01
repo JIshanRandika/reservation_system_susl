@@ -13,13 +13,13 @@
 
                     {!! Form::open(['url' => 'viewadminagribooking',  'method' => 'GET',  'id' => 'booking_form']) !!}
 
-                    
+
                     <div class="form-group">
                     {{Form::label('CheckInDate', 'Check In Date') }}
-                    <input type="date" class="form-control" name="CheckInDate" value="{{request()->query('CheckInDate') != null ? request()->query('CheckInDate') : date('yyyy/mm/dd')}}">
+                        <input type="date" class="form-control" name="CheckInDate" value="{{ date('Y-m-d', strtotime( request()->query('CheckInDate') ) ) != null ?  date('Y-m-d', strtotime( request()->query('CheckInDate') ) ) : date('yyyy/mm/dd')}}">
 
                     </div>
-                   
+
 
                     </br>
                     {{Form::submit('Submit', ['class'=>'btn btn-primary', 'v-on:click'=>'formSubmit'])}}
@@ -27,7 +27,7 @@
                     {!! Form::close() !!}
 
              </div>
-     
+
 
     <table border = "1" class="table table-striped">
     <tr>
@@ -40,7 +40,7 @@
         <!-- <td>Request VC Approval</td> -->
         <td>Status</td>
         <td>Option</td>
-        
+
     </tr>
     @foreach ($agrsbookings as $agrsbooking)
     <tr>
@@ -55,9 +55,9 @@
         @else
         <td>Requested</td>
         @endif -->
-        
+
         <td>{{ $agrsbooking->Status }}</td>
-       
+
         <td>
         <a href = 'showadminaf/{{ $agrsbooking->BookingId }}'>View</a></br>
         <!-- <a href = 'afadminconfirm/{{ $agrsbooking->BookingId }}'>Confirm</a></br>

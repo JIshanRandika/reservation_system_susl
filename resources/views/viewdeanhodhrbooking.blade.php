@@ -15,7 +15,7 @@
 
     <div class="form-group">
     {{Form::label('CheckInDate', 'Check In Date') }}
-    <input type="date" class="form-control" name="CheckInDate" value="{{request()->query('CheckInDate') != null ? request()->query('CheckInDate') : date('yyyy/mm/dd')}}">
+        <input type="date" class="form-control" name="CheckInDate" value="{{ date('Y-m-d', strtotime( request()->query('CheckInDate') ) ) != null ?  date('Y-m-d', strtotime( request()->query('CheckInDate') ) ) : date('yyyy/mm/dd')}}">
 
     </div>
 
@@ -44,11 +44,11 @@
         <!-- <td>Request VC Approval</td> -->
         <td>Status</td>
         <td>Option</td>
-        
-        
-        
-        
-         
+
+
+
+
+
     </tr>
     @foreach ($hrbookings as $hrbooking)
     <tr>
@@ -68,9 +68,9 @@
         @else
         <td>Requested</a></td>
         @endif -->
-        
+
         <td>{{ $hrbooking->Status }}</td>
-       
+
         <td>
         <a class="nav-link btn btn-outline-primary" href = 'showhrdean/{{ $hrbooking->BookingId }}'>View</a></br>
 
@@ -78,11 +78,11 @@
         <a class="nav-link btn btn-outline-primary" href = 'hrrecommend/{{ $hrbooking->BookingId }}'>Recommend</a> </br>
         <a class="nav-link btn btn-outline-primary" href = 'hrnotrecommend/{{ $hrbooking->BookingId }}'>Reject</a>
         @else
-        
+
         @endif
-       
+
         </td>
-       
+
     </tr>
     @endforeach
     </table>

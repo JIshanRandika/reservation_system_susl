@@ -14,7 +14,7 @@
 
     <div class="form-group">
     {{Form::label('CheckInDate', 'Check In Date') }}
-    <input type="date" class="form-control" name="CheckInDate" value="{{request()->query('CheckInDate') != null ? request()->query('CheckInDate') : date('yyyy/mm/dd')}}">
+        <input type="date" class="form-control" name="CheckInDate" value="{{ date('Y-m-d', strtotime( request()->query('CheckInDate') ) ) != null ?  date('Y-m-d', strtotime( request()->query('CheckInDate') ) ) : date('yyyy/mm/dd')}}">
 
     </div>
 
@@ -38,11 +38,11 @@
         <!-- <td>Number Of Units</td> -->
         <td>Request VC Approval</td>
         <td>Status</td>
-        
-        
-        
-        
-         
+
+
+
+
+
     </tr>
     @foreach ($hrbookings as $hrbooking)
     <tr>
@@ -58,12 +58,12 @@
         @else
         <td>Requested</td>
         @endif
-        
+
         <td>{{ $hrbooking->Status }}</td>
-       
-      
-       
-       
+
+
+
+
     </tr>
     @endforeach
     </table>

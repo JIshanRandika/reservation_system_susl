@@ -15,7 +15,7 @@
 
     <div class="form-group">
     {{Form::label('CheckInDate', 'Check In Date') }}
-    <input type="date" class="form-control" name="CheckInDate" value="{{request()->query('CheckInDate') != null ? request()->query('CheckInDate') : date('yyyy/mm/dd')}}">
+    <input type="date" class="form-control" name="CheckInDate" value="{{ date('Y-m-d', strtotime( request()->query('CheckInDate') ) ) != null ?  date('Y-m-d', strtotime( request()->query('CheckInDate') ) ) : date('yyyy/mm/dd')}}">
 
     </div>
 
@@ -48,11 +48,11 @@
         <td>Status</td>
         <td></td>
         {{-- <td>Option</td> --}}
-        
-        
-        
-        
-         
+
+
+
+
+
     </tr>
     @foreach ($agrsbookings as $agrsbooking)
     <tr>
@@ -75,13 +75,13 @@
         <td>{{number_format($agrsbooking->payment_total, 2) }}</td>
         <td>{{ $agrsbooking->Status }}</td>
 
-        <td > 
+        <td >
             @if ($agrsbooking->Status!='Cancelled' && $agrsbooking->Status!='Confirmed' )
             <a href="{{ url('afcancel',$agrsbooking->BookingId) }}" class="btn btn-danger">Cancel</a>
             @endif
         </br> </br>
             @if($agrsbooking->Status=='Payment Requested' && $agrsbooking->payment_total)<a href="https://www.sab.ac.lk/codl/payment/?event=reservation&category=Kabana&payname={{$agrsbooking->GuestName}}&payid={{auth()->user()->id}}&payamount={{$agrsbooking->payment_total}}&payother={{$agrsbooking->BookingId}}&payemail={{auth()->user()->email}}" class="btn btn-primary">Pay Now</a>@endif
-        
+
         </td>
         {{-- <td>
         <a href = 'showafdean/{{ $agrsbooking->BookingId }}'>View</a></br>
@@ -89,11 +89,11 @@
         <a href = 'afrecommend/{{ $agrsbooking->BookingId }}'>Recommend</a> </br>
         <a href = 'afnotrecommend/{{ $agrsbooking->BookingId }}'>Reject</a>
         @else
-        
+
         @endif
-        
+
         </td> --}}
-       
+
     </tr>
     @endforeach
     </table>

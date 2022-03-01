@@ -15,7 +15,7 @@
 
 <div class="form-group">
 {{Form::label('CheckInDate', 'Check In Date') }}
-<input type="date" class="form-control" name="CheckInDate" value="{{request()->query('CheckInDate') != null ? request()->query('CheckInDate') : date('yyyy/mm/dd')}}">
+    <input type="date" class="form-control" name="CheckInDate" value="{{ date('Y-m-d', strtotime( request()->query('CheckInDate') ) ) != null ?  date('Y-m-d', strtotime( request()->query('CheckInDate') ) ) : date('yyyy/mm/dd')}}">
 
 </div>
 
@@ -41,11 +41,11 @@
         <!-- <td>Request VC Approval</td> -->
         <td>Status</td>
         <td>Option</td>
-        
-        
-        
-        
-         
+
+
+
+
+
     </tr>
     @foreach ($hrbookings as $hrbooking)
     <tr>
@@ -60,17 +60,17 @@
         @else
         <td>Requested</td>
         @endif -->
-        
+
         <td>{{ $hrbooking->Status }}</td>
-       
+
         <td>
         <a href = 'showadminhr/{{ $hrbooking->BookingId }}'>View</a></br>
         <!-- <a href = 'hradminconfirm/{{ $hrbooking->BookingId }}'>Confirm</a></br>
         <a href = 'hradminnotconfirm/{{ $hrbooking->BookingId }}'>Reject</a> -->
-       
+
         </td>
-       
-       
+
+
     </tr>
     @endforeach
     </table>

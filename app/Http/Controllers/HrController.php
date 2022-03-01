@@ -104,11 +104,13 @@ class HrController extends Controller
             //$bookings2 = hrbooking::whereBetween('CheckOutDate', [$request->input('CheckInDate'), $request->input('CheckOutDate')])->get();
             $CheckInDate = hrbooking::whereDate('CheckInDate', '<=', $request->input('CheckInDate'))
                 ->whereDate('CheckOutDate', '>=', $request->input('CheckInDate'))
+                ->where('HolodayResortId', '1')
                 ->where('Status', 'Confirmed')
                 ->get();
 
             $CheckInDate2 = hrbooking::whereDate('CheckInDate', '>=', $request->input('CheckInDate'))
                 ->whereDate('CheckInDate', '<=', $request->input('CheckOutDate'))
+                ->where('HolodayResortId', '1')
                 ->where('Status', 'Confirmed')
                 ->get();
 //            $CheckInDate = hrbooking::whereDate('CheckInDate', '<=', $request->input('CheckInDate'))->whereDate('CheckOutDate', '>=', $request->input('CheckInDate'))->where('HolodayResortId', '1')->where('Status', 'Confirmed')->get();
@@ -131,7 +133,7 @@ class HrController extends Controller
 
 
                 // master room
-                    $totalPayments = $holidayPayment->master * $totalDays * ($request->input('NoOfUnits'));
+                $totalPayments = $holidayPayment->master * $totalDays * (+$request->input('NoOfUnits'));
 
 
                     $hrbooking = new hrbooking;
@@ -191,11 +193,13 @@ class HrController extends Controller
             //$bookings2 = hrbooking::whereBetween('CheckOutDate', [$request->input('CheckInDate'), $request->input('CheckOutDate')])->get();
             $CheckInDate = hrbooking::whereDate('CheckInDate', '<=', $request->input('CheckInDate'))
                 ->whereDate('CheckOutDate', '>=', $request->input('CheckInDate'))
+                ->where('HolodayResortId', '2')
                 ->where('Status', 'Confirmed')
                 ->get();
 
             $CheckInDate2 = hrbooking::whereDate('CheckInDate', '>=', $request->input('CheckInDate'))
                 ->whereDate('CheckInDate', '<=', $request->input('CheckOutDate'))
+                ->where('HolodayResortId', '2')
                 ->where('Status', 'Confirmed')
                 ->get();
 //            $CheckInDate = hrbooking::whereDate('CheckInDate', '<=', $request->input('CheckInDate'))->whereDate('CheckOutDate', '>=', $request->input('CheckInDate'))->where('HolodayResortId', '2')->where('Status', 'Confirmed')->get();

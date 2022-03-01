@@ -14,7 +14,7 @@
 
     <div class="form-group">
     {{Form::label('CheckInDate', 'Date') }}
-    <input type="date" class="form-control" name="CheckInDate" value="{{request()->query('CheckInDate') != null ? request()->query('CheckInDate') : date('yyyy/mm/dd')}}">
+        <input type="date" class="form-control" name="CheckInDate" value="{{ date('Y-m-d', strtotime( request()->query('CheckInDate') ) ) != null ?  date('Y-m-d', strtotime( request()->query('CheckInDate') ) ) : date('yyyy/mm/dd')}}">
 
     </div>
 
@@ -48,11 +48,11 @@
         <!-- <td> IS Recommended </td> -->
         <td>Status</td>
         <td>Confirm</td>
-        
-        
-        
-        
-         
+
+
+
+
+
     </tr>
     @foreach ($avubookings as $avubooking)
     <tr>
@@ -67,17 +67,17 @@
         <td>{{ $avubooking->EventName  }}</td>
         <td>{{ $avubooking->Description }}</td>
         {{-- <td>{{ $avubooking->name}}</td> --}}
-        
+
         <td>{{ $avubooking->Status }}</td>
-       
+
         <td>
-        
-       
+
+
         <a class="nav-link btn btn-outline-primary" href = 'showrecavu/{{ $avubooking->BookingId }}'>HOD Approval</a></br>
         <a class="nav-link btn btn-outline-primary" href = 'avuconfirm/{{ $avubooking->BookingId }}'>Confirm</a></br>
         <a class="nav-link btn btn-outline-primary" href = 'avunotconfirm/{{ $avubooking->BookingId }}'>Reject</a>
         </td>
-       
+
     </tr>
     @endforeach
     </table>

@@ -14,7 +14,7 @@
 
     <div class="form-group">
     {{Form::label('CheckInDate', 'Date') }}
-    <input type="date" class="form-control" name="CheckInDate" value="{{request()->query('CheckInDate') != null ? request()->query('CheckInDate') : date('yyyy/mm/dd')}}">
+        <input type="date" class="form-control" name="CheckInDate" value="{{ date('Y-m-d', strtotime( request()->query('CheckInDate') ) ) != null ?  date('Y-m-d', strtotime( request()->query('CheckInDate') ) ) : date('yyyy/mm/dd')}}">
 
     </div>
 
@@ -43,11 +43,11 @@
         {{-- <td>Recommendation from</td> --}}
         <td>Status</td>
         <td>Option</td>
-        
-        
-        
-        
-         
+
+
+
+
+
     </tr>
     @foreach ($agridbookings as $agridbooking)
     <tr>
@@ -59,9 +59,9 @@
         <td>{{ $agridbooking->EndTime }}</td>
         <!-- <td>{{ $agridbooking->Description }}</td> -->
         {{-- <td>{{ $agridbooking->name }}</td> --}}
-        
+
         <td>{{ $agridbooking->Status }}</td>
-       
+
         <td>
         <a class="nav-link btn btn-outline-primary" href = 'show/{{ $agridbooking->BookingId }}'>View</a></br>
         <a class="nav-link btn btn-outline-primary" href = 'showrecagrid/{{ $agridbooking->BookingId }}'>HOD Approval</a></br>
@@ -70,7 +70,7 @@
         <a class="nav-link btn btn-outline-primary" href = 'afdconfirm/{{ $agridbooking->BookingId }}'>Confirm</a></br>
         <a class="nav-link btn btn-outline-primary" href = 'afdnotconfirm/{{ $agridbooking->BookingId }}'>Reject</a>
         </td>
-       
+
     </tr>
     @endforeach
     </table>

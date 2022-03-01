@@ -15,7 +15,7 @@
 
     <div class="form-group">
     {{Form::label('CheckInDate', 'Check In Date') }}
-    <input type="date" class="form-control" name="CheckInDate" value="{{request()->query('CheckInDate') != null ? request()->query('CheckInDate') : date('yyyy/mm/dd')}}">
+        <input type="date" class="form-control" name="CheckInDate" value="{{ date('Y-m-d', strtotime( request()->query('CheckInDate') ) ) != null ?  date('Y-m-d', strtotime( request()->query('CheckInDate') ) ) : date('yyyy/mm/dd')}}">
 
     </div>
 
@@ -40,11 +40,11 @@
         <td>Description</td>
         <td>Status</td>
         <td>Confirm</td>
-        
-        
-        
-        
-         
+
+
+
+
+
     </tr>
     @foreach ($agridbookings as $agridbooking)
     <tr>
@@ -57,19 +57,19 @@
         <td>{{ $agridbooking->NoOfGuest  }}</td>
         <td>{{ $agridbooking->Description }}</td>
         <td>{{ $agridbooking->Status }}</td>
-       
+
         <td>
-        
+
         <a class="nav-link btn btn-outline-primary" href = 'showafddean/{{ $agridbooking->BookingId }}'>View</a></br>
         @if($agridbooking->Status == 'Send to Recommendation')
         <a class="nav-link btn btn-outline-primary" href = 'afdrecommend/{{ $agridbooking->BookingId }}'>Recommend</a> </br>
         <a class="nav-link btn btn-outline-primary" href = 'afdnotrecommend/{{ $agridbooking->BookingId }}'>Reject</a>
         @else
-        
+
         @endif
-       
+
         </td>
-       
+
     </tr>
     @endforeach
     </table>

@@ -15,7 +15,7 @@
 
     <div class="form-group">
     {{Form::label('CheckInDate', 'Check In Date') }}
-    <input type="date" class="form-control" name="CheckInDate" value="{{request()->query('CheckInDate') != null ? request()->query('CheckInDate') : date('yyyy/mm/dd')}}">
+        <input type="date" class="form-control" name="CheckInDate" value="{{ date('Y-m-d', strtotime( request()->query('CheckInDate') ) ) != null ?  date('Y-m-d', strtotime( request()->query('CheckInDate') ) ) : date('yyyy/mm/dd')}}">
 
     </div>
 
@@ -44,11 +44,11 @@
         <!-- <td>Request VC Approval</td> -->
         <td>Status</td>
         <td>Option</td>
-        
-        
-        
-        
-         
+
+
+
+
+
     </tr>
     @foreach ($nestbookings as $nestbooking)
     <tr>
@@ -63,17 +63,17 @@
         @else
         <td>Requested</td>
         @endif -->
-        
+
         <td>{{ $nestbooking->Status }}</td>
-       
+
         <td>
         <a href = 'showadminnest/{{ $nestbooking->BookingId }}'>View</a></br>
         <!-- <a href = 'nestadminconfirm/{{ $nestbooking->BookingId }}'>Confirm</a></br>
         <a href = 'nestadminnotconfirm/{{ $nestbooking->BookingId }}'>Reject</a> -->
-       
+
         </td>
-       
-       
+
+
     </tr>
     @endforeach
     </table>

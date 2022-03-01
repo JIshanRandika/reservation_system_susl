@@ -14,15 +14,17 @@
 
                 <div class="form-group">
                     {{Form::label('CheckInDate', 'Start Date') }}
-                    <input type="date" class="form-control" name="CheckInDate"
-                           value="{{request()->query('CheckInDate') != null ? request()->query('CheckInDate') : date('yyyy/mm/dd')}}">
+{{--                    <input type="date" class="form-control" name="CheckInDate"--}}
+{{--                           value="{{request()->query('CheckInDate') != null ? request()->query('CheckInDate') : date('yyyy/mm/dd')}}">--}}
+                    <input type="date" class="form-control" name="CheckInDate" value="{{ date('Y-m-d', strtotime( request()->query('CheckInDate') ) ) != null ?  date('Y-m-d', strtotime( request()->query('CheckInDate') ) ) : date('yyyy/mm/dd')}}">
 
                 </div>
 
                 <div class="form-group">
                     {{Form::label('CheckOutDate', 'End Date') }}
-                    <input type="date" class="form-control" name="CheckOutDate"
-                           value="{{request()->query('CheckOutDate') != null ? request()->query('CheckOutDate') : date('yyyy/mm/dd')}}">
+{{--                    <input type="date" class="form-control" name="CheckOutDate"--}}
+{{--                           value="{{request()->query('CheckOutDate') != null ? request()->query('CheckOutDate') : date('yyyy/mm/dd')}}">--}}
+                    <input type="date" class="form-control" name="CheckOutDate" value="{{ date('Y-m-d', strtotime( request()->query('CheckOutDate') ) ) != null ?  date('Y-m-d', strtotime( request()->query('CheckOutDate') ) ) : date('yyyy/mm/dd')}}">
 
                 </div>
 
