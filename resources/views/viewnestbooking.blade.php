@@ -10,13 +10,14 @@
 
    <div class="mb-3">
 
-    
+
     {!! Form::open(['url' => 'viewnestbooking',  'method' => 'GET',  'id' => 'booking_form']) !!}
 
 
     <div class="form-group">
     {{Form::label('CheckInDate', 'Start Date') }}
-    <input type="date" class="form-control" name="CheckInDate" value="{{request()->query('CheckInDate') != null ? request()->query('CheckInDate') : date('yyyy/mm/dd')}}">
+{{--    <input type="date" class="form-control" name="CheckInDate" value="{{request()->query('CheckInDate') != null ? request()->query('CheckInDate') : date('yyyy/mm/dd')}}">--}}
+        <input type="date" class="form-control" name="CheckInDate" value="{{ date('Y-m-d', strtotime( request()->query('CheckInDate') ) ) != null ?  date('Y-m-d', strtotime( request()->query('CheckInDate') ) ) : date('yyyy/mm/dd')}}">
 
     </div>
 
@@ -26,17 +27,17 @@
     <div class="form-group">
         {{Form::label('CheckOutDate', 'End Date') }}
         <input type="date" class="form-control" name="CheckOutDate" value="{{request()->query('CheckOutDate') != null ? request()->query('CheckOutDate') : date('yyyy/mm/dd')}}">
-    
+
         </div>
-    
-    
+
+
         </br>
         <div class="center">
     {{Form::submit('Submit', ['class'=>'btn btn-primary', 'v-on:click'=>'formSubmit'])}}
     </div>
     {!! Form::close() !!}
     </div>
-   
+
     <div class="btn-group" style="width:100%">
     <a class="nav-link btn btn-outline-primary " href="/download-pdf?CheckInDate={{request()->CheckInDate}}&CheckOutDate={{request()->CheckOutDate}}">Generate Deatils</a></br>
     <a class="nav-link btn btn-outline-primary " href="/download-monthpdf?CheckInDate={{request()->CheckInDate}}">Generate Monthly Details </a></br>
@@ -60,11 +61,11 @@
         {{-- <td>Request VC Approval</td> --}}
         <td>Status</td>
         <td>Option</td>
-        
-        
-        
-        
-         
+
+
+
+
+
     </tr>
     @foreach ($nestbookings as $nestbooking)
     <tr>
@@ -86,7 +87,7 @@
         @endif --}}
         .
         <td>{{ $nestbooking->Status }}</td>
-       
+
         <td>
         <a class="nav-link btn btn-outline-primary " href = 'shownest/{{ $nestbooking->BookingId }}'>View</a></br>
         <a class="nav-link btn btn-outline-primary " href = 'showrecnest/{{ $nestbooking->BookingId }}'>Recommendation</a></br>
@@ -96,11 +97,11 @@
             <a class="nav-link btn btn-outline-primary " href = 'nestconfirm/request-payment/{{ $nestbooking->BookingId }}'>Request Payment</a></br>
             <a class="nav-link btn btn-outline-primary " href = 'nestconfirm/{{ $nestbooking->BookingId }}'>Confirm</a></br>
         <a class="nav-link btn btn-outline-primary " href = 'nestnotconfirm/{{ $nestbooking->BookingId }}'>Reject</a></br>
-        
+
 
         </td>
-       
-       
+
+
     </tr>
     @endforeach
     </table>

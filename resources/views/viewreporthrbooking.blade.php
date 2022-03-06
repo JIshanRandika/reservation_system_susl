@@ -14,25 +14,27 @@
 
     <div class="form-group">
     {{Form::label('CheckInDate', 'Start Date') }}
-    <input type="date" class="form-control" name="CheckInDate" value="{{request()->query('CheckInDate') != null ? request()->query('CheckInDate') : date('yyyy/mm/dd')}}">
+{{--    <input type="date" class="form-control" name="CheckInDate" value="{{request()->query('CheckInDate') != null ? request()->query('CheckInDate') : date('yyyy/mm/dd')}}">--}}
+        <input type="date" class="form-control" name="CheckInDate" value="{{ date('Y-m-d', strtotime( request()->query('CheckInDate') ) ) != null ?  date('Y-m-d', strtotime( request()->query('CheckInDate') ) ) : date('yyyy/mm/dd')}}">
 
     </div>
 
     <div class="form-group">
             {{Form::label('CheckOutDate', 'End Date') }}
-            <input type="date" class="form-control" name="CheckOutDate" value="{{request()->query('CheckOutDate') != null ? request()->query('CheckOutDate') : date('yyyy/mm/dd')}}">
-        
-            </div>
+{{--            <input type="date" class="form-control" name="CheckOutDate" value="{{request()->query('CheckOutDate') != null ? request()->query('CheckOutDate') : date('yyyy/mm/dd')}}">--}}
+        <input type="date" class="form-control" name="CheckInDate" value="{{ date('Y-m-d', strtotime( request()->query('CheckOutDate') ) ) != null ?  date('Y-m-d', strtotime( request()->query('CheckOutDate') ) ) : date('yyyy/mm/dd')}}">
+
+    </div>
     </br>
     {{Form::submit('Submit', ['class'=>'btn btn-primary', 'v-on:click'=>'formSubmit'])}}
     </div>
     {!! Form::close() !!}
     <div class="btn-group" style="width:100%">
-    
+
     <a class="nav-link btn btn-info " href="/download-hrpdf?CheckInDate={{request()->CheckInDate}}&CheckOutDate={{request()->CheckOutDate}}">Generate Deatils</a></br>
     <a class="nav-link btn btn-info " href="/download-hrmonthpdf?CheckInDate={{request()->CheckInDate}}">Generate Monthly details </a></br>
     <a class="nav-link btn btn-info " href="/download-hryearpdf?CheckInDate={{request()->CheckInDate}}">Generate Year details </a></br>
-    
+
     </div>
 </div>
 

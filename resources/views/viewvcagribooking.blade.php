@@ -14,7 +14,8 @@
 
         <div class="form-group">
         {{Form::label('CheckInDate', 'Check In Date') }}
-        <input type="date" class="form-control" name="CheckInDate" value="{{request()->query('CheckInDate') != null ? request()->query('CheckInDate') : date('yyyy/mm/dd')}}">
+{{--        <input type="date" class="form-control" name="CheckInDate" value="{{request()->query('CheckInDate') != null ? request()->query('CheckInDate') : date('yyyy/mm/dd')}}">--}}
+            <input type="date" class="form-control" name="CheckInDate" value="{{ date('Y-m-d', strtotime( request()->query('CheckInDate') ) ) != null ?  date('Y-m-d', strtotime( request()->query('CheckInDate') ) ) : date('yyyy/mm/dd')}}">
 
         </div>
 
@@ -42,11 +43,11 @@
         {{-- <td>Request VC Approval</td> --}}
         <td>Status</td>
         <td>Option</td>
-        
-        
-        
-        
-         
+
+
+
+
+
     </tr>
     @foreach ($agrsbookings as $agrsbooking)
     <tr>
@@ -65,9 +66,9 @@
         @else
         <td>Requested</td>
         @endif --}}
-        
+
         <td>{{ $agrsbooking->Status }}</td>
-       
+
 
         <td>
         <a class="nav-link btn btn-outline-primary" href = 'showafsvc/{{ $agrsbooking->BookingId }}'>View</a></br>
@@ -75,13 +76,13 @@
         <a class="nav-link btn btn-outline-primary" href = 'afsapprove/{{ $agrsbooking->BookingId }}'>Approve</a></br>
         <a class="nav-link btn btn-outline-primary" href = 'afsnotapprove/{{ $agrsbooking->BookingId }}'>Reject</a>
         @else
-        
+
         @endif
         </td>
-   
-        
-       
-       
+
+
+
+
     </tr>
     @endforeach
     </table>

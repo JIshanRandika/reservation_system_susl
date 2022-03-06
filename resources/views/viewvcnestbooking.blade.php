@@ -14,7 +14,8 @@
 
         <div class="form-group">
         {{Form::label('CheckInDate', 'Check In Date') }}
-        <input type="date" class="form-control" name="CheckInDate" value="{{request()->query('CheckInDate') != null ? request()->query('CheckInDate') : date('yyyy/mm/dd')}}">
+{{--        <input type="date" class="form-control" name="CheckInDate" value="{{request()->query('CheckInDate') != null ? request()->query('CheckInDate') : date('yyyy/mm/dd')}}">--}}
+            <input type="date" class="form-control" name="CheckInDate" value="{{ date('Y-m-d', strtotime( request()->query('CheckInDate') ) ) != null ?  date('Y-m-d', strtotime( request()->query('CheckInDate') ) ) : date('yyyy/mm/dd')}}">
 
         </div>
 
@@ -39,11 +40,11 @@
         {{-- <td>Request VC Approval</td> --}}
         <td>Status</td>
         <td>Option</td>
-        
-        
-        
-        
-         
+
+
+
+
+
     </tr>
     @foreach ($nestbookings as $nestbooking)
     <tr>
@@ -59,23 +60,23 @@
         @else
         <td>Requested</td>
         @endif --}}
-        
-        <td>{{ $nestbooking->Status }}</td>
-       
 
-       
+        <td>{{ $nestbooking->Status }}</td>
+
+
+
         <td>
         <a class="nav-link btn btn-outline-primary" href = 'shownestvc/{{ $nestbooking->BookingId }}'>View</a></br>
         @if($nestbooking->Status == 'Request Vice Chancellor Approval')
         <a class="nav-link btn btn-outline-primary" href = 'nestapprove/{{ $nestbooking->BookingId }}'>Approve</a></br>
         <a class="nav-link btn btn-outline-primary" href = 'nestnotapprove/{{ $nestbooking->BookingId }}'>Reject</a>
         @else
-        
+
         @endif
         </td>
-       
-       
-       
+
+
+
     </tr>
     @endforeach
     </table>
