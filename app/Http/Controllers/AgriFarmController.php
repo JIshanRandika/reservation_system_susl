@@ -63,7 +63,7 @@ class AgriFarmController extends Controller
 
         $this->validate($request,[
             'BookingType' =>'required',
-            'CheckInDate'=>'required|date|after:yesterday',
+            'CheckInDate'=>'required|date|after:-1 days',
             'CheckOutDate'=>'required|date|after:CheckInDate',
             'NoOfAdults'=>'required|numeric|min:1',
             'NoOfChildren'=>'required|numeric|min:0',

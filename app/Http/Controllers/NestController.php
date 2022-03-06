@@ -69,7 +69,7 @@ class NestController extends Controller
 
 //dd( $hod[0]->id,$Department);
         $this->validate($request,[
-            'CheckInDate'=>'required|date|after:yesterday',
+            'CheckInDate'=>'required|date|after:-1 days',
             'CheckOutDate'=>'required|date|after:CheckInDate',
 
 //            'StartTime'=>'required',

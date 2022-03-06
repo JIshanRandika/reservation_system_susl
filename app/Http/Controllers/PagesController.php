@@ -51,7 +51,8 @@ class PagesController extends Controller
 
 
             $this->validate($request,[
-                'CheckInDate'=>'required|date|after:yesterday',
+
+                'CheckInDate'=>'required|date|after:-1 days',
                 'CheckOutDate'=>'required|date|after:CheckInDate',
                 'NoOfAdults'=>'required|numeric|min:1',
                 'NoOfChildren'=>'required|numeric|min:0',
@@ -74,20 +75,24 @@ class PagesController extends Controller
 //                $CheckInDate2 = hrbooking::whereDate('CheckInDate', '>=', $request->input('CheckInDate'))->whereDate('CheckInDate', '<=', $request->input('CheckOutDate'))->where('HolodayResortId', '1')->where('Status', 'Confirmed')->get();
                 $CheckInDate = hrbooking::whereDate('CheckInDate', '<=', $request->input('CheckInDate'))
                     ->whereDate('CheckOutDate', '>=', $request->input('CheckInDate'))
-                    ->where('Status', 'Request for Booking')
+                    ->where('HolodayResortId', '1')
+                    ->where('Status', 'Confirmed')
                     ->get();
 
                 $CheckInDate2 = hrbooking::whereDate('CheckInDate', '>=', $request->input('CheckInDate'))
                     ->whereDate('CheckInDate', '<=', $request->input('CheckOutDate'))
-                    ->where('Status', 'Request for Booking')
+                    ->where('HolodayResortId', '1')
+                    ->where('Status', 'Confirmed')
                     ->get();
 
                 $check_cndition1 = $CheckInDate->sum('NoOfUnits') + $request->input('NoOfUnits');
                 $check_cndition2 = $CheckInDate2->sum('NoOfUnits') + $request->input('NoOfUnits');
                 $check_cndition3 = ($CheckInDate->sum('NoOfUnits') + $CheckInDate2->sum('NoOfUnits')) + $request->input('NoOfUnits');
 
+//                dd($check_cndition3);
                 if( $check_cndition1 > 7 || $check_cndition2 > 7 || $check_cndition3 > 7){
-                     return redirect()->back()->with(session()->flash('alert-danger', 'Sorry already booked!'));
+//                     return redirect()->back()->with(session()->flash('alert-danger', 'Sorry already booked!'));
+                    return back()->with('success','Sorry Allready Booked!');
                  }else{
 
                     if (Auth::check()) {
@@ -108,12 +113,14 @@ class PagesController extends Controller
 //                $CheckInDate2 = hrbooking::whereDate('CheckInDate', '>=', $request->input('CheckInDate'))->whereDate('CheckInDate', '<=', $request->input('CheckOutDate'))->where('HolodayResortId', '2')->where('Status', 'Confirmed')->get();
                 $CheckInDate = hrbooking::whereDate('CheckInDate', '<=', $request->input('CheckInDate'))
                     ->whereDate('CheckOutDate', '>=', $request->input('CheckInDate'))
-                    ->where('Status', 'Request for Booking')
+                    ->where('HolodayResortId', '2')
+                    ->where('Status', 'Confirmed')
                     ->get();
 
                 $CheckInDate2 = hrbooking::whereDate('CheckInDate', '>=', $request->input('CheckInDate'))
                     ->whereDate('CheckInDate', '<=', $request->input('CheckOutDate'))
-                    ->where('Status', 'Request for Booking')
+                    ->where('HolodayResortId', '2')
+                    ->where('Status', 'Confirmed')
                     ->get();
 
                 $check_cndition1 = $CheckInDate->sum('NoOfUnits') + $request->input('NoOfUnits');
@@ -140,7 +147,7 @@ class PagesController extends Controller
     if($request->input('property') == 'NEST'){
 
         $this->validate($request,[
-            'CheckInDate'=>'required|date|after:yesterday',
+            'CheckInDate'=>'required|date|after:-1 days',
             'CheckOutDate'=>'required|date|after:CheckInDate',
             'NoOfAdults'=>'required|numeric|min:1',
             'NoOfChildren'=>'required|numeric|min:0',
@@ -163,12 +170,12 @@ class PagesController extends Controller
 //            $CheckInDate2 = nestbooking::whereDate('CheckInDate', '>=', $request->input('CheckInDate'))->whereDate('CheckInDate', '<=', $request->input('CheckOutDate'))->where('Status', 'Confirmed')->get();
             $CheckInDate = nestbooking::whereDate('CheckInDate', '<=', $request->input('CheckInDate'))
                 ->whereDate('CheckOutDate', '>=', $request->input('CheckInDate'))
-                ->where('Status', 'Request for Booking')
+                ->where('Status', 'Confirmed')
                 ->get();
 
             $CheckInDate2 = nestbooking::whereDate('CheckInDate', '>=', $request->input('CheckInDate'))
                 ->whereDate('CheckInDate', '<=', $request->input('CheckOutDate'))
-                ->where('Status', 'Request for Booking')
+                ->where('Status', 'Confirmed')
                 ->get();
 
             $check_cndition1 = $CheckInDate->sum('NoOfUnits') + $request->input('NoOfUnits');
@@ -195,12 +202,12 @@ class PagesController extends Controller
 //            $CheckInDate2 = nestbooking::whereDate('CheckInDate', '>=', $request->input('CheckInDate'))->whereDate('CheckInDate', '<=', $request->input('CheckOutDate'))->where('Status', 'Confirmed')->get();
             $CheckInDate = nestbooking::whereDate('CheckInDate', '<=', $request->input('CheckInDate'))
                 ->whereDate('CheckOutDate', '>=', $request->input('CheckInDate'))
-                ->where('Status', 'Request for Booking')
+                ->where('Status', 'Confirmed')
                 ->get();
 
             $CheckInDate2 = nestbooking::whereDate('CheckInDate', '>=', $request->input('CheckInDate'))
                 ->whereDate('CheckInDate', '<=', $request->input('CheckOutDate'))
-                ->where('Status', 'Request for Booking')
+                ->where('Status', 'Confirmed')
                 ->get();
 
             $check_cndition1 = $CheckInDate->sum('NoOfUnits') + $request->input('NoOfUnits');
@@ -227,13 +234,19 @@ if($request->input('property') == 'Agri Farm Kabana'){
 
 
     $this->validate($request,[
-        'CheckInDate'=>'required|date|after:yesterday',
+//        date('Y-m-d',strtotime( 'CheckInDate') )>date('Y-m-d',strtotime("yesterday")) => 'Please Enter a Valid Date',
+
+//        date('Y-m-d',strtotime( 'CheckInDate') )=>'after:yesterday',
+//        date('Y-m-d', strtotime( request()->query('CheckOutDate') ) )=>'required|date|after:CheckInDate',
+        'CheckInDate'=>'required|date|after:-1 days',
         'CheckOutDate'=>'required|date|after:CheckInDate',
         'NoOfAdults'=>'required|numeric|min:1',
         'NoOfChildren'=>'required|numeric|min:0',
         'NoOfUnits'=>'required|numeric|min:1',
     ],
     [
+//        date(strtotime( request()->query('CheckInDate.after') ) )=> 'Please Enter a Valid Date',
+//            date('Y-m-d',strtotime( 'CheckInDate') )>date('Y-m-d',strtotime("yesterday")) => 'Please Enter a Valid Date',
         'CheckInDate.after' => 'Please Enter a Valid Date',
         'CheckOutDate.after' => 'Please Enter a Valid Date',
         'NoOfAdults.required' => 'Please Enter The Number of Adults',
@@ -249,12 +262,12 @@ if($request->input('property') == 'Agri Farm Kabana'){
 //        $CheckInDate2 = agrsbooking::whereDate('CheckInDate', '>=', $request->input('CheckInDate'))->whereDate('CheckInDate', '<=', $request->input('CheckOutDate'))->where('Status', 'Confirmed')->get();
     $CheckInDate = agrsbooking::whereDate('CheckInDate', '<=', $request->input('CheckInDate'))
         ->whereDate('CheckOutDate', '>=', $request->input('CheckInDate'))
-        ->where('Status', 'Request for Booking')
+        ->where('Status', 'Confirmed')
         ->get();
 
     $CheckInDate2 = agrsbooking::whereDate('CheckInDate', '>=', $request->input('CheckInDate'))
         ->whereDate('CheckInDate', '<=', $request->input('CheckOutDate'))
-        ->where('Status', 'Request for Booking')
+        ->where('Status', 'Confirmed')
         ->get();
 
         $check_cndition1 = $CheckInDate->sum('NoOfUnits') + $request->input('NoOfUnits');
@@ -292,7 +305,7 @@ if($request->input('property') == 'Agri Farm Dining Room'){
     if($difference == 0){
     $this->validate($request,[
 
-        'CheckInDate'=>'required|date|after:yesterday',
+        'CheckInDate'=>'required|date|after:-1 days',
         'StartTime'=>'required|after:CurrentTime',
         //'StartTime'=>'required|after:CurrentTime',
         'EndTime'=>'required|after:StartTime',
@@ -308,7 +321,7 @@ if($request->input('property') == 'Agri Farm Dining Room'){
 
         $this->validate($request,[
 
-            'CheckInDate'=>'required|date|after:yesterday',
+            'CheckInDate'=>'required|date|after:-1 days',
             'StartTime'=>'required',
             //'StartTime'=>'required|after:CurrentTime',
             'EndTime'=>'required|after:StartTime',
@@ -365,7 +378,7 @@ if($request->input('property') == 'Agri Farm Dining Room'){
         if($difference == 0){
             $this->validate($request,[
 
-                'CheckInDate'=>'required|date|after:yesterday',
+                'CheckInDate'=>'required|date|after:-1 days',
                 'StartTime'=>'required|after:CurrentTime',
                 'EndTime'=>'required|after:StartTime',
             ],
@@ -379,7 +392,7 @@ if($request->input('property') == 'Agri Farm Dining Room'){
 
             $this->validate($request,[
 
-                'CheckInDate'=>'required|date|after:yesterday',
+                'CheckInDate'=>'required|date|after:-1 days',
                 'StartTime'=>'required',
                 'EndTime'=>'required|after:StartTime',
             ],

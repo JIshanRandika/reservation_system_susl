@@ -66,7 +66,7 @@ class HrController extends Controller
 
 
             'BookingType' =>'required',
-            'CheckInDate'=>'required|date|after:yesterday',
+            'CheckInDate'=>'required|date|after:-1 days',
             'CheckOutDate'=>'required|date|after:CheckInDate',
             'NoOfAdults'=>'required|numeric|min:1',
             'NoOfChildren'=>'required|numeric|min:0',
@@ -121,6 +121,7 @@ class HrController extends Controller
             $check_cndition2 = $CheckInDate2->sum('NoOfUnits') + $request->input('NoOfUnits');
             $check_cndition3 = ($CheckInDate->sum('NoOfUnits') + $CheckInDate2->sum('NoOfUnits')) + $request->input('NoOfUnits');
 
+//            dd($check_cndition1);
             if( $check_cndition1 > 7 || $check_cndition2 > 7 || $check_cndition3 > 7){
              //  dd("already booked");
                 // return redirect('/')->with('danger','Sorry Allready Booked!');
