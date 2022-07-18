@@ -109,6 +109,13 @@
         </td>
         </tr>
         
+        <tr>
+            <td>Payment (Rs.)</td>
+            <td>
+            <input class="form-control" type = 'textarea' name = 'payment_total'
+            value = '<?php echo$users[0]->payment_total; ?>' readonly="readonly"/>
+            </td>
+            </tr>
 
          <tr>
         <td>Comment By HOD</td>

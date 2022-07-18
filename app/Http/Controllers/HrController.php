@@ -78,20 +78,29 @@ class HrController extends Controller
 
 
         // payment calculate
-        $getstartdate = date('Y-m-d', strtotime( $request->CheckInDate ) );
-        $getenddate = date('Y-m-d', strtotime( $request->CheckOutDate ) );
+//         $getstartdate = date('Y-m-d', strtotime( $request->CheckInDate ) );
+//         $getenddate = date('Y-m-d', strtotime( $request->CheckOutDate ) );
 
-        $startDate = Carbon::createFromFormat('Y-m-d',$getstartdate);
-        $endDate = Carbon::createFromFormat('Y-m-d',$getenddate);
+//         $startDate = Carbon::createFromFormat('Y-m-d',$getstartdate);
+//         $endDate = Carbon::createFromFormat('Y-m-d',$getenddate);
 
-//        $startDate = Carbon::createFromFormat('Y-m-d',$request->CheckInDate);
-//        $endDate = Carbon::createFromFormat('Y-m-d',$request->CheckOutDate);
+// //        $startDate = Carbon::createFromFormat('Y-m-d',$request->CheckInDate);
+// //        $endDate = Carbon::createFromFormat('Y-m-d',$request->CheckOutDate);
 
 
-        $dateRange = CarbonPeriod::create($startDate, $endDate);
+//         $dateRange = CarbonPeriod::create($startDate, $endDate);
 
-        $totalDaysObj =$startDate->diff($endDate);
-        $totalDays =$totalDaysObj->format('%a');
+//         $totalDaysObj =$startDate->diff($endDate);
+//         $totalDays =$totalDaysObj->format('%a');
+
+$t1 = Carbon::parse($request->CheckInDate);
+        $t2 = Carbon::parse($request->CheckOutDate);
+        $diff = $t1->diff($t2);
+
+        $hoursPerDay=0;
+        $diff->h>0?$hoursPerDay++:'';
+
+        $totalDays = $diff->d+$hoursPerDay;
         $holidayPayment = HoliydayResortPayment::where('booking_type',$request->input('BookingType'))->first();
 
 
