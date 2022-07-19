@@ -140,6 +140,10 @@
                         this.no_of_units = 0;
                         alert('Sorry, You can not book more than 28 units.')
                     }
+                    if(this.room_type_hr == 3 &&  this.no_of_units > 7){
+                        this.no_of_units = 0;
+                        alert('Sorry, You can not book more than 28 units.')
+                    }
 
                     if(this.room_type_nest == 1 &&  this.no_of_units > 1){
                         this.no_of_units = 0;
@@ -171,7 +175,15 @@
                         }else{
                             $("#check_form").submit();
                         }
+                    }else if(this.room_type_hr == 3){
+                        if(this.no_of_adults > 6*this.no_of_units || this.no_of_children > 1*this.no_of_units){
+                            alert("Sorry, the maximum number of people that can be accommodated has been exceeded.");
+                        }else{
+                            $("#check_form").submit();
+                        }
                     }
+
+
                     else if(this.room_type_nest == 1){
                         if(this.no_of_adults > 2*this.no_of_units || this.no_of_children > 2*this.no_of_units){
                             alert("Sorry, the maximum number of people that can be accommodated has been exceeded.");

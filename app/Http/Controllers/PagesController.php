@@ -107,6 +107,7 @@ class PagesController extends Controller
 
         }
 
+
             if($request->input('HolodayResortId') == 2){
 
 //                $CheckInDate = hrbooking::whereDate('CheckInDate', '<=', $request->input('CheckInDate'))->whereDate('CheckOutDate', '>=', $request->input('CheckInDate'))->where('HolodayResortId', '2')->where('Status', 'Confirmed')->get();
@@ -140,6 +141,41 @@ class PagesController extends Controller
                 }
 
         }
+
+
+            if($request->input('HolodayResortId') == 3){
+
+//                $CheckInDate = hrbooking::whereDate('CheckInDate', '<=', $request->input('CheckInDate'))->whereDate('CheckOutDate', '>=', $request->input('CheckInDate'))->where('HolodayResortId', '2')->where('Status', 'Confirmed')->get();
+//                $CheckInDate2 = hrbooking::whereDate('CheckInDate', '>=', $request->input('CheckInDate'))->whereDate('CheckInDate', '<=', $request->input('CheckOutDate'))->where('HolodayResortId', '2')->where('Status', 'Confirmed')->get();
+                $CheckInDate = hrbooking::whereDate('CheckInDate', '<=', $request->input('CheckInDate'))
+                    ->whereDate('CheckOutDate', '>=', $request->input('CheckInDate'))
+                    ->where('HolodayResortId', '3')
+                    ->where('Status', 'Confirmed')
+                    ->get();
+
+                $CheckInDate2 = hrbooking::whereDate('CheckInDate', '>=', $request->input('CheckInDate'))
+                    ->whereDate('CheckInDate', '<=', $request->input('CheckOutDate'))
+                    ->where('HolodayResortId', '3')
+                    ->where('Status', 'Confirmed')
+                    ->get();
+
+                $check_cndition1 = $CheckInDate->sum('NoOfUnits') + $request->input('NoOfUnits');
+                $check_cndition2 = $CheckInDate2->sum('NoOfUnits') + $request->input('NoOfUnits');
+                $check_cndition3 = ($CheckInDate->sum('NoOfUnits') + $CheckInDate2->sum('NoOfUnits')) + $request->input('NoOfUnits');
+
+                if( $check_cndition1 > 7 || $check_cndition2 > 7 || $check_cndition3 >7){
+                    return redirect()->back()->with(session()->flash('alert-danger', 'Sorry already booked!'));
+                }else{
+
+                    if (Auth::check()) {
+                        return redirect('/hr')->with(session()->flash('alert-success', 'Available'));
+                    }
+
+                    return redirect('/login')->with(session()->flash('alert-success', 'Available.Please loggin to the system for booking.'));
+
+                }
+
+            }
     }
 
 

@@ -29,20 +29,20 @@
 
 
 
-    
+
 </head>
 <body>
     <div style="background-image: url('img/background.jpg'); height: 3000px;" id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
-               
+
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
-                   
+
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item active">
                             <a class="nav-link" href="/">Home </a>
@@ -107,7 +107,7 @@
                             <a class="nav-link" href="/dean_hod">Booking Details</a>
                         </li>
                         @endif
-                        
+
                         <li class="nav-item">
                             <a class="nav-link" href="/af">Kabanas</a>
                         </li>
@@ -126,9 +126,9 @@
                         <li class="nav-item">
                             <a class="nav-link " href="/contact">Contact Us</a>
                         </li>
-                       
-                        
-                       
+
+
+
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -177,17 +177,17 @@
         @endif
     <div class = "row">
     <div class = "col-md-12 col-lg-12">
-    
-        
+
+
     @include('inc.messages')
              @yield('content')
     </div>
     <!-- <div class = "col-md-4 col-lg-4">
-    
+
              @include('inc.sidebar')
     </div> -->
     </div>
-    
+
     </div>
     </br>
     {{-- @include('inc.footer') --}}

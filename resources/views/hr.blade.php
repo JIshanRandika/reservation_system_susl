@@ -31,6 +31,7 @@
 
             <td>Master Room</td>
             <td>Single Room</td>
+             <td>Whole Resort</td>
          </tr>
 
 
@@ -39,29 +40,33 @@
 <tbody>
         <tr>
         <td>Sabaragamuwa University Staff</td>
-
+            <td>800.00   </td>
+            <td>800.00   </td>
         <td>2400.00 </td>
-        <td>800.00   </td>
+
          </tr>
 
     <tr>
     <td>Other University Staff </td>
-
+        <td>1100.00</td>
+        <td>1100.00</td>
             <td>3400.00</td>
-            <td>1100.00</td>
+
          </tr>
          <tr>
          <td>Resource Persons</td>
-
+             <td>400.00</td>
+             <td>400.00</td>
             <td>2000.00</td>
-            <td>400.00</td>
+
          </tr>
 
           <tr>
     <td>Local Visitors</td>
-
+              <td>2000.00</td>
+              <td>2000.00</td>
             <td>10000.00</td>
-            <td>2000.00</td>
+
          </tr>
 
  </tbody>
@@ -180,6 +185,10 @@
                         this.no_of_units = 0;
                         alert('Sorry, You can not book more than 28 units.')
                     }
+                    if(this.room_type == 3 &&  this.no_of_units > 7){
+                        this.no_of_units = 0;
+                        alert('Sorry, You can not book more than 7 units.')
+                    }
 
                 },
 
@@ -196,7 +205,21 @@
                         }else{
                             $("#booking_form").submit();
                         }
+                    }else if(this.room_type == 3){
+                        if(this.no_of_adults > 6*this.no_of_units || this.no_of_children > 1*this.no_of_units){
+                            alert("Sorry, the maximum number of people that can be accommodated has been exceeded. Please check the number of units and number of guests");
+                        }else{
+                            $("#booking_form").submit();
+                        }
                     }
+
+                    // else if(this.room_type == 3){
+                    //     if(this.no_of_adults > 6*this.no_of_units || this.no_of_children > 1*this.no_of_units)){
+                    //         alert("Sorry, the maximum number of people that can be accommodated has been exceeded. Please check the number of units and number of guests");
+                    //     }else{
+                    //         $("#booking_form").submit();
+                    //     }
+                    // }
 
 
                 }
