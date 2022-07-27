@@ -20,6 +20,7 @@
     </div>
 
 
+
     </br>
     {{Form::submit('Submit', ['class'=>'btn btn-primary', 'v-on:click'=>'formSubmit'])}}
     </div>
@@ -38,6 +39,7 @@
         <td>Check Out Date</td>
         <!-- <td>Number Of Units</td> -->
         <td>Request VC Approval</td>
+        <td>Normal / Free</td>
         <td>Status</td>
         <td>Option</td>
 
@@ -60,14 +62,15 @@
         @else
         <td>Requested</td>
         @endif
-
+        <td>{{ $hrbooking->NormalOrFree }}</td>
         <td>{{ $hrbooking->Status }}</td>
 
         <td>
-        <a href = 'showreghr/{{ $hrbooking->BookingId }}'>View</a></br>
-        <!-- <a href = 'hrregconfirm/{{ $hrbooking->BookingId }}'>Approve</a></br>
-        <a href = 'hrregnotconfirm/{{ $hrbooking->BookingId }}'>Reject</a> -->
-
+        <a class="nav-link btn btn-outline-primary " href = 'showreghr/{{ $hrbooking->BookingId }}'>View</a></br>
+            @if($hrbooking->Status == 'Request Registrar Approval')
+         <a class="nav-link btn btn-outline-primary " href = 'hrregconfirm/{{ $hrbooking->BookingId }}'>Approve</a></br>
+        <a class="nav-link btn btn-outline-primary " href = 'hrregnotconfirm/{{ $hrbooking->BookingId }}'>Reject</a>
+            @endif
         </td>
 
 

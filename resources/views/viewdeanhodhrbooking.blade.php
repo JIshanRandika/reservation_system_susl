@@ -13,6 +13,7 @@
     {!! Form::open(['url' => 'viewdeanhodhrbooking',  'method' => 'GET',  'id' => 'booking_form']) !!}
 
 
+
     <div class="form-group">
     {{Form::label('CheckInDate', 'Check In Date') }}
         <input type="date" class="form-control" name="CheckInDate" value="{{ date('Y-m-d', strtotime( request()->query('CheckInDate') ) ) != null ?  date('Y-m-d', strtotime( request()->query('CheckInDate') ) ) : date('yyyy/mm/dd')}}">
@@ -42,6 +43,7 @@
         <td>Guest Type</td>
         <!-- <td>Description</td> -->
         <!-- <td>Request VC Approval</td> -->
+        <td>Normal / Free</td>
         <td>Status</td>
         <td>Option</td>
 
@@ -68,7 +70,7 @@
         @else
         <td>Requested</a></td>
         @endif -->
-
+        <td>{{ $hrbooking->NormalOrFree }}</td>
         <td>{{ $hrbooking->Status }}</td>
 
         <td>

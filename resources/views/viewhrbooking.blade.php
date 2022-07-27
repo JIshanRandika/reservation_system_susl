@@ -13,6 +13,7 @@
     {!! Form::open(['url' => 'viewhrbooking',  'method' => 'GET',  'id' => 'booking_form']) !!}
 
 
+
     <div class="form-group">
     {{Form::label('CheckInDate', 'Start Date') }}
         <input type="date" class="form-control" name="CheckInDate" value="{{ date('Y-m-d', strtotime( request()->query('CheckInDate') ) ) != null ?  date('Y-m-d', strtotime( request()->query('CheckInDate') ) ) : date('yyyy/mm/dd')}}">
@@ -46,6 +47,7 @@
         <td>Check In Date</td>
         <td>Check Out Date</td>
         <td>Number Of Units</td>
+        <td>Normal / Free</td>
         <td>Status</td>
         <td>Option</td>
 
@@ -63,6 +65,7 @@
         <td>{{ $hrbooking->CheckInDate }}</td>
         <td>{{ $hrbooking->CheckOutDate }}</td>
         <td>{{ $hrbooking->NoOfUnits }}</td>
+        <td>{{ $hrbooking->NormalOrFree }}</td>
 
 
         <td>{{ $hrbooking->Status }}</td>
@@ -70,13 +73,42 @@
         <td>
         <a class="nav-link btn btn-outline-primary " href = 'showhr/{{ $hrbooking->BookingId }}'>View</a></br>
 
-         <a class="nav-link btn btn-outline-primary " href = 'showrechr/{{ $hrbooking->BookingId }}'>HOD Approval</a></br>
-        <a class="nav-link btn btn-outline-primary " href = 'showvchr/{{ $hrbooking->BookingId }}'>VC Approval</a></br>
-        <!-- <a href = 'hrregapprove/{{ $hrbooking->BookingId }}'>Registrar Approval </a></br> -->
 
+            @if($hrbooking->NormalOrFree=='Normal')
+                @if($hrbooking->BookingType=='Resource Person'||$hrbooking->BookingType=='SUSL Staff')
+                    @if($hrbooking->Status=='Request for Booking')
+                        <a class="nav-link btn btn-outline-primary " href = 'showrechr/{{ $hrbooking->BookingId }}'>HOD Approval</a></br>
+
+                    @endif
+                    @if($hrbooking->Status=='Recommended')
+                        <a class="nav-link btn btn-outline-primary " href = 'hrregapprove/{{ $hrbooking->BookingId }}'>Registrar Approval</a></br>
+
+                    @endif
+                @endif
+                    @if($hrbooking->BookingType=='Local Visitor'||$hrbooking->BookingType=='Other University Staff')
+                        @if($hrbooking->Status=='Request for Booking')
+                        <a class="nav-link btn btn-outline-primary " href = 'hrregapprove/{{ $hrbooking->BookingId }}'>Registrar Approval</a></br>
+                        @endif
+                    @endif
+
+
+
+            @endif
+
+            @if($hrbooking->NormalOrFree=='Free')
+                @if($hrbooking->Status=='Request for Booking')
+                <a class="nav-link btn btn-outline-primary " href = 'showvchr/{{ $hrbooking->BookingId }}'>VC Approval</a></br>
+                @endif
+            @endif
+
+
+            @if($hrbooking->Status=='Approved By Registrar'||$hrbooking->Status=='Approved By Vice Chancellor')
+                @if($hrbooking->NormalOrFree=='Normal')
                 <a class="nav-link btn btn-outline-primary " href = 'hrconfirm/request-payment/{{ $hrbooking->BookingId }}'>Request Payment</a></br>
-        <a class="nav-link btn btn-outline-primary " href = 'hrconfirm/{{ $hrbooking->BookingId }}'>Confirm</a></br>
-        <a class="nav-link btn btn-outline-primary " href = 'hrnotconfirm/{{ $hrbooking->BookingId }}'>Reject</a></br>
+                @endif
+                <a class="nav-link btn btn-outline-primary " href = 'hrconfirm/{{ $hrbooking->BookingId }}'>Confirm</a></br>
+            @endif
+            <a class="nav-link btn btn-outline-primary " href = 'hrnotconfirm/{{ $hrbooking->BookingId }}'>Reject</a></br>
 
 
         </td>

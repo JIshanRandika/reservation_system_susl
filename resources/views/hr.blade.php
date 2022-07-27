@@ -106,7 +106,7 @@
                         </div>
                         <div class="form-group">
                         {{Form::label('NoOfChildren', 'Number Of Children') }}
-                        {{Form::text('NoOfChildren', '',['class'=>'form-control','placeholder'=>'Number Of Children', 'v-model' => 'no_of_children'])}}
+                        {{Form:: text('NoOfChildren', '',['class'=>'form-control','placeholder'=>'Number Of Children', 'v-model' => 'no_of_children'])}}
                         </div>
 
 
@@ -128,7 +128,11 @@
                     {{ Form::datetimeLocal('CheckOutDate', !empty($sessionData) ? Input::old('CheckInDate') : null, ['class' => 'form-control']) }}
                 </div>
 
+                <div class="form-group">
+                    {{Form::label('NormalOrFree', 'Normal or Free') }}
+                    {{Form::select('NormalOrFree', ['Normal' => 'Normal', 'Free' => 'Free'], null, ['placeholder' => 'Please select ...','class'=>'form-control'])}}
 
+                </div>
 
                         <div class="form-group">
                         {{Form::label('Description', 'Description') }}
@@ -140,9 +144,11 @@
                         {!! Form::select('Recommendation_from', $select, null, ['class'=>'form-control', 'placeholder' => 'Please select ...']) !!}
                         </div> --}}
 
+
                         <!-- <div class="form-group" v-if="booking_type === `Resource Person` || booking_type === `SUSL Staff`">
-                        {{Form::label('VCApproval', 'Request VC Approval') }}
-                        {{Form::select('VCApproval', [1 => 'Yes', 0 => 'No'], null, ['placeholder' => 'Please select ...','class'=>'form-control'])}}
+
+{{--                        {{Form::label('VCApproval', 'Request VC Approval') }}--}}
+{{--                        {{Form::select('VCApproval', [1 => 'Yes', 0 => 'No'], null, ['placeholder' => 'Please select ...','class'=>'form-control'])}}--}}
 
                         </div> -->
 

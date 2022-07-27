@@ -61,6 +61,10 @@ class HrController extends Controller
         ->where('Department', '=', [$Department])
         ->where('Designation', '=', 'Head of The Department')
         ->get();
+        $hodEmail=User::select('email')
+            ->where('Department', '=', [$Department])
+            ->where('Designation', '=', 'Head of The Department')
+            ->get();
 
         $this->validate($request,[
 
@@ -106,6 +110,7 @@ $t1 = Carbon::parse($request->CheckInDate);
 
         $totalPayments = 0;
         //dd($request->input('HolodayResortId'));
+
 
         if($request->input('HolodayResortId') == 3){
             //Master bed room
@@ -156,20 +161,60 @@ $t1 = Carbon::parse($request->CheckInDate);
                     $hrbooking-> NoOfAdults = $request->input('NoOfAdults');
                     $hrbooking-> NoOfChildren = $request->input('NoOfChildren');
                     $hrbooking-> NoOfUnits = $request->input('NoOfUnits');
-                    $hrbooking-> Description = $request->input('Description');
-                    $hrbooking-> Status = 'Request for Booking';
-                    $hrbooking-> payment_total = $totalPayments;
 
+                    $hrbooking-> NormalOrFree = $request->input('NormalOrFree');
+
+                    $hrbooking-> Description = $request->input('Description');
+
+//                if(($request->input('BookingType')=='Local Visitor')||($request->input('BookingType')=='Other University Staff')){
+//                    $hrbooking-> Status = 'Request for Booking';
+//
+//                    $email = DB::select('select email from users where id = 12');
+//                }
+//                if(($request->input('BookingType')=='Resource Person')||($request->input('BookingType')=='SUSL Staff')){
+//                    $hrbooking-> Status = 'Send to Recommendation';
+//                    $email = $hodEmail;
+//
+//
+//                }
+                if($request->input('NormalOrFree')=='Normal'){
+                    if(($request->input('BookingType')=='Local Visitor')||($request->input('BookingType')=='Other University Staff')){
+                        $hrbooking-> Status = 'Request for Booking';
+
+                        $email = DB::select('select email from users where id = 12');
+                    }
+                    if(($request->input('BookingType')=='Resource Person')||($request->input('BookingType')=='SUSL Staff')){
+                        $hrbooking-> Status = 'Send to Recommendation';
+                        $department =Auth::user()->Department;
+                        $email = $hodEmail;
+                    }
                     if($request->input('BookingType') == "Resource Person" || $request->input('BookingType') == "SUSL Staff"){
                         $hrbooking-> Recommendation_from = $hod[0]->id;
-                        //$hrbooking-> VCApproval = $request->input('VCApproval');
-
-                      }
-                      else{
+                        // $hrbooking-> VCApproval = $request->input('VCApproval');
+                    }
+                    else{
                         $hrbooking-> Recommendation_from = 13;
-                        //$hrbooking-> VCApproval = 0;
+                        // $hrbooking-> VCApproval = 0;
+                    }
+                }else{
+                    $hrbooking-> Status = 'Request for Booking';
+                    $hrbooking-> Recommendation_from = 13;
+                    $email = DB::select('select email from users where id = 12');
+                }
 
-                      }
+
+                    $hrbooking-> payment_total = $totalPayments;
+
+//                    if($request->input('BookingType') == "Resource Person" || $request->input('BookingType') == "SUSL Staff"){
+//                        $hrbooking-> Recommendation_from = $hod[0]->id;
+//                        //$hrbooking-> VCApproval = $request->input('VCApproval');
+//
+//                      }
+//                      else{
+//                        $hrbooking-> Recommendation_from = 13;
+//                        //$hrbooking-> VCApproval = 0;
+//
+//                      }
 
                     $hrbooking-> GuestId = Auth::user()->id;
                     $hrbooking-> GuestName = Auth::user()->name;
@@ -187,7 +232,15 @@ $t1 = Carbon::parse($request->CheckInDate);
                     );
 
                     //$Recommendation_From = $request->input('Recommendation_from');
-                   $email = DB::select('select email from users where id = 12');
+
+//                   $email = DB::select('select email from users where id = 12');
+
+//                $email =DB::table('hrbookings')
+//                    ->select('users.email')
+//                    ->join('users','users.id','=','hrbookings.Recommendation_From')
+//                    ->where(['hrbookings.BookingId' => $BookingId])
+//                    ->get();
+
                     //$CheckInDate = hrbooking::where('CheckInDate', '=', $request->input('CheckInDate'))->first();
 
 
@@ -238,20 +291,41 @@ $t1 = Carbon::parse($request->CheckInDate);
                 $hrbooking-> NoOfAdults = $request->input('NoOfAdults');
                 $hrbooking-> NoOfChildren = $request->input('NoOfChildren');
                 $hrbooking-> NoOfUnits = $request->input('NoOfUnits');
+
+                $hrbooking-> NormalOrFree = $request->input('NormalOrFree');
+
                 $hrbooking-> Description = $request->input('Description');
-                $hrbooking-> Status = 'Request for Booking';
+
+                if($request->input('NormalOrFree')=='Normal'){
+                    if(($request->input('BookingType')=='Local Visitor')||($request->input('BookingType')=='Other University Staff')){
+                        $hrbooking-> Status = 'Request for Booking';
+
+                        $email = DB::select('select email from users where id = 12');
+                    }
+                    if(($request->input('BookingType')=='Resource Person')||($request->input('BookingType')=='SUSL Staff')){
+                        $hrbooking-> Status = 'Send to Recommendation';
+                        $department =Auth::user()->Department;
+                        $email = $hodEmail;
+                    }
+                    if($request->input('BookingType') == "Resource Person" || $request->input('BookingType') == "SUSL Staff"){
+                        $hrbooking-> Recommendation_from = $hod[0]->id;
+                        // $hrbooking-> VCApproval = $request->input('VCApproval');
+                    }
+                    else{
+                        $hrbooking-> Recommendation_from = 13;
+                        // $hrbooking-> VCApproval = 0;
+                    }
+                }else{
+                    $hrbooking-> Status = 'Request for Booking';
+                    $hrbooking-> Recommendation_from = 13;
+                    $email = DB::select('select email from users where id = 12');
+                }
+
+
+
                 $hrbooking-> payment_total = $totalPayments;
 
-                if($request->input('BookingType') == "Resource Person" || $request->input('BookingType') == "SUSL Staff"){
-                    $hrbooking-> Recommendation_from = $hod[0]->id;
-                    // $hrbooking-> VCApproval = $request->input('VCApproval');
 
-                }
-                else{
-                    $hrbooking-> Recommendation_from = 13;
-                    // $hrbooking-> VCApproval = 0;
-
-                }
 
                 $hrbooking-> GuestId = Auth::user()->id;
                 $hrbooking-> GuestName = Auth::user()->name;
@@ -269,7 +343,7 @@ $t1 = Carbon::parse($request->CheckInDate);
                 );
 
 
-                $email = DB::select('select email from users where id = 12');
+//                $email = DB::select('select email from users where id = 12');
                 //send mail to hr coordinator
                 Mail::to($email)->send(new hremail($data));
 
@@ -325,20 +399,64 @@ $t1 = Carbon::parse($request->CheckInDate);
                     $hrbooking-> NoOfAdults = $request->input('NoOfAdults');
                     $hrbooking-> NoOfChildren = $request->input('NoOfChildren');
                     $hrbooking-> NoOfUnits = $request->input('NoOfUnits');
-                    $hrbooking-> Description = $request->input('Description');
-                    $hrbooking-> Status = 'Request for Booking';
-                    $hrbooking-> payment_total = $totalPayments;
 
+                $hrbooking-> NormalOrFree = $request->input('NormalOrFree');
+
+                    $hrbooking-> Description = $request->input('Description');
+
+
+//                if(($request->input('BookingType')=='Local Visitor')||($request->input('BookingType')=='Other University Staff')){
+//                    $hrbooking-> Status = 'Request for Booking';
+//
+//                    $email = DB::select('select email from users where id = 12');
+//                }
+//                if(($request->input('BookingType')=='Resource Person')||($request->input('BookingType')=='SUSL Staff')){
+//                    $hrbooking-> Status = 'Send to Recommendation';
+////                    $department =Auth::user()->Department;
+//                    $email = $hodEmail;
+//
+////                    $email = DB::select( DB::raw("SELECT email from users WHERE users.Department = {$department} AND users.Designation = 'Head of The Department'") );
+//
+//
+//                }
+
+                if($request->input('NormalOrFree')=='Normal'){
+                    if(($request->input('BookingType')=='Local Visitor')||($request->input('BookingType')=='Other University Staff')){
+                        $hrbooking-> Status = 'Request for Booking';
+
+                        $email = DB::select('select email from users where id = 12');
+                    }
+                    if(($request->input('BookingType')=='Resource Person')||($request->input('BookingType')=='SUSL Staff')){
+                        $hrbooking-> Status = 'Send to Recommendation';
+                        $department =Auth::user()->Department;
+                        $email = $hodEmail;
+                    }
                     if($request->input('BookingType') == "Resource Person" || $request->input('BookingType') == "SUSL Staff"){
                         $hrbooking-> Recommendation_from = $hod[0]->id;
-                       // $hrbooking-> VCApproval = $request->input('VCApproval');
-
-                      }
-                      else{
+                        // $hrbooking-> VCApproval = $request->input('VCApproval');
+                    }
+                    else{
                         $hrbooking-> Recommendation_from = 13;
-                       // $hrbooking-> VCApproval = 0;
+                        // $hrbooking-> VCApproval = 0;
+                    }
+                }else{
+                    $hrbooking-> Status = 'Request for Booking';
+                    $hrbooking-> Recommendation_from = 13;
+                    $email = DB::select('select email from users where id = 12');
+                }
 
-                      }
+                    $hrbooking-> payment_total = $totalPayments;
+
+//                    if($request->input('BookingType') == "Resource Person" || $request->input('BookingType') == "SUSL Staff"){
+//                        $hrbooking-> Recommendation_from = $hod[0]->id;
+//                       // $hrbooking-> VCApproval = $request->input('VCApproval');
+//
+//                      }
+//                      else{
+//                        $hrbooking-> Recommendation_from = 13;
+//                       // $hrbooking-> VCApproval = 0;
+//
+//                      }
 
                     $hrbooking-> GuestId = Auth::user()->id;
                     $hrbooking-> GuestName = Auth::user()->name;
@@ -356,7 +474,7 @@ $t1 = Carbon::parse($request->CheckInDate);
                     );
 
 
-                    $email = DB::select('select email from users where id = 12');
+//                    $email = DB::select('select email from users where id = 12');
                     //send mail to hr coordinator
                     Mail::to($email)->send(new hremail($data));
 
